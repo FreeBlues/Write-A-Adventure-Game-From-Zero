@@ -54,22 +54,29 @@ end
 
 -- 新建地图数据表, 插入地图上每个格子里的物体数据, 目前为 plant  和 mineral 为空
 function createMapTable()
+    --local mapTable = {}
     for i=1,gridCount,1 do
         for j=1,gridCount,1 do
-            mapItem = {pos=vec2(i,j), plant=nil, mineral=nil}
+            mapItem = {pos=vec2(i,j), plant=randomPlant(), mineral=randomMinerial()}
+            --mapItem = {pos=vec2(i,j), plant=nil, mineral=nil}
             table.insert(mapTable, mapItem)
         end
     end
     updateMap()
 end
 
--- 更新地图
+-- 跟据地图数据表, 刷新地图
 function updateMap()
     setContext(imgMap)   
     for i = 1,gridCount*gridCount,1 do
         local pos = mapTable[i].pos
+        local plant = mapTable[i].plant
+        local mineral = mapTable[i].mineral
         -- 绘制地面
         drawUnitGround(pos)
+        -- 绘制植物和矿物
+        if plant ~= nil then drawUnitTree(pos, plant) end
+        if mineral ~= nil then drawUnitMineral(pos, mineral) end
     end
     setContext()
 end
@@ -88,6 +95,58 @@ function drawUnitGround(position)
     popMatrix()
 end
 
+-- 绘制单位格子内的植物
+function drawUnitTree(position,plant)
+    local x,y = scaleX * position.x, scaleY * position.y
+    pushMatrix()
+    -- 绘制植物图像
+    sprite(itemTable[plant], x, y, scaleX*6/10,scaleY)
+    
+    --fill(100,100,200,255)
+    --text(plant,x,y)
+    popMatrix()
+end
+
+-- 绘制单位格子内的矿物
+function drawUnitMineral(position,mineral)
+    local x,y = scaleX * position.x, scaleY * position.y
+    pushMatrix()
+    -- 绘制矿物图像
+    sprite(itemTable[mineral], x+scaleX/2, y, scaleX/2, scaleX/2)
+
+    --fill(100,100,200,255)
+    --text(mineral,x+scaleX/2,y)
+    popMatrix()
+end
+
+-- 随机生成植物
+function randomPlant()
+    local seed = math.random(1.0, plantSeed)
+    local result = nil
+    
+    if seed >= 1 and seed < 2 then result = tree1
+    elseif seed >= 2 and seed < 3 then result = tree2
+    elseif seed >= 3 and seed < 4 then result = tree3
+    elseif seed >= 4 and seed <= plantSeed then result = nil end
+    
+    -- 返回随机选取的物体名字
+    return result
+end
+
+-- 随机生成矿物
+function randomMinerial()
+    local seed = math.random(1.0, minerialSeed)
+    local result = nil
+
+    if seed >= 1 and seed < 2 then result = mine1
+    elseif seed >= 2 and seed < 3 then result = mine2
+    elseif seed >= 3 and seed <= minerialSeed then result = nil end
+    
+    -- 返回随机选取的物体名字
+    return result
+end
+
+-- 绘制地图
 function drawMap() 
     -- 绘制地图
     sprite(imgMap,-scaleX,-scaleY)
