@@ -16,10 +16,10 @@ function setup()
 
     m = Sprites(600,400,img,pos)
     
-    ---[[ 初始化摄像机，触摸摇杆
-    --touches = {}
+    ---[[ 初始化触摸摇杆
+    touches = {}
     -- cam = Camera(pos.x,pos.y,pos.z,pos.x+look.x,look.y,pos.z+look.z)
-    -- ls,rs = Stick(20,WIDTH-300,200),Stick(2,WIDTH-120)
+    ls,rs = Stick(20,WIDTH-300,200),Stick(2,WIDTH-120)
     -- ls,rs = Stick(1),Stick(3,WIDTH-120)
     
     -- 初始化地图
@@ -38,7 +38,7 @@ function draw()
     --sprite("Documents:bgGrass",(WIDTH/2+10*s*m.i)%(WIDTH),HEIGHT/2)
     --sprite("Documents:bgGrass",(WIDTH+10*s*m.i)%(WIDTH),HEIGHT/2)
     -- sprite("Documents:bgGrass",WIDTH/2,HEIGHT/2)
-    --[[
+    ---[[
     if ls.x ~= 0 then
         step = 10 *m.i*ls.x/math.abs(ls.x)
     else
@@ -59,9 +59,9 @@ function draw()
     myStatus:drawUI()
     --myStatus:raderGraph()
     
-    -- background(0)
-    --ls:draw()
-    --rs:draw()
+    -- 绘制操纵杆
+    ls:draw()
+    rs:draw()
     fill(249, 7, 7, 255)
     text(ss, 500,100)
         
@@ -332,8 +332,8 @@ function Sprites:draw(w,h)
         self.prevTime = self.prevTime + 0.08 
         self.k = math.fmod(self.i,#self.imgs) 
         self.i = self.i + 1    
-        self.x = self.x + 1
-        self.y = self.y + 1
+        self.x = self.x + ls.x
+        self.y = self.y + ls.y
     end
     self.q=self.q+1
     -- rect(800,500,120,120) 
@@ -510,4 +510,54 @@ function Maps:drawMineral(position,mineral)
     --fill(100,100,200,255)
     --text(mineral,x+self.scaleX/2,y)
     popMatrix()
+end
+
+--# Stick
+-- 操纵杆类, 作者: @Jaybob
+Stick = class()
+
+function Stick:init(ratio,x,y,b,s)
+    self.ratio = ratio or 1
+    self.i = vec2(x or 120,y or 120)
+    self.v = vec2(0,0)
+    self.b = b or 180   --大圆半径
+    self.s = s or 100   --小圆半径
+    self.d = d or 50
+    self.a = 0
+    self.touchId = nil
+    self.x,self.y = 0,0
+end
+
+function Stick:draw()
+    -- 没有 touched 函数的 Stick 类是如何找到自己对应的触摸数据的？根据点击处坐标跟操纵杆的距离来判断
+    if touches[self.touchId] == nil then
+        -- 循环取出 touches 表内的数据，比较其坐标跟操纵杆的距离，若小于半径则说明是在点击操纵杆
+        for i,t in pairs(touches) do
+            if vec2(t.x,t.y):dist(self.i) < self.b/2 then self.touchId = i end
+        end
+        self.v = vec2(0,0)
+    else
+        -- 根据对应于操纵杆的触摸的xy坐标设置 self.v，再根据它计算夹角 self.a
+        self.v = vec2(touches[self.touchId].x,touches[self.touchId].y) - self.i
+        self.a = math.deg(math.atan2(self.v.y, self.v.x))
+    end
+    -- 根据 self.v 和 self.b 计算得到 self.t
+    self.t = math.min(self.b/2,self.v:len())
+    
+    if self.t >= self.b/2 then
+        self.v = vec2(math.cos(math.rad(self.a))*self.b/2,math.sin(math.rad(self.a))*self.b/2)
+    end
+    
+    pushMatrix()
+    fill(127, 127, 127, 100)
+    -- 分别绘制大圆，小圆
+    ellipse(self.i.x, self.i.y, self.b)
+    ellipse(self.i.x+self.v.x, self.i.y+self.v.y, self.s)
+    --print(self.v.x, self.s)
+    popMatrix()
+    -- 根据 ratio 重新设置 self.v/self.t   
+    self.v = self.v/(self.b/2)*self.ratio
+    self.t = self.t/(self.b/2)*self.ratio
+    -- 根据 self.v/self.t，重新设置 self.x/self.y
+    self.x, self.y = self.v.x, self.v.y
 end
