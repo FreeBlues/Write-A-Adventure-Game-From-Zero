@@ -1,7 +1,8 @@
---
+-- MapSample
 
+-- 初始化地图参数
 function initParams()
-    print("Simple Map Sample!!")
+    print("地图初始化开始...")
     textMode(CORNER)
     spriteMode(CORNER)
     
@@ -46,6 +47,45 @@ function initParams()
                 {pos=vec2(3,1),plant=nil,mineral=nil},{pos=vec2(3,2),plant=nil,mineral=mine2},
                 {pos=vec2(3,3),plant=tree3,mineral=nil}}
     
+    -- 根据初始参数值新建地图
+    createMapTable()
+    print("OK, 地图初始化完成! ")
+end
+
+-- 新建地图数据表, 插入地图上每个格子里的物体数据, 目前为 plant  和 mineral 为空
+function createMapTable()
+    for i=1,gridCount,1 do
+        for j=1,gridCount,1 do
+            mapItem = {pos=vec2(i,j), plant=nil, mineral=nil}
+            table.insert(mapTable, mapItem)
+        end
+    end
+    updateMap()
+end
+
+-- 更新地图
+function updateMap()
+    setContext(imgMap)   
+    for i = 1,gridCount*gridCount,1 do
+        local pos = mapTable[i].pos
+        -- 绘制地面
+        drawUnitGround(pos)
+    end
+    setContext()
+end
+
+-- 绘制单位格子地面
+function drawUnitGround(position)
+    local x,y = scaleX * position.x, scaleY * position.y
+    pushMatrix()
+    stroke(99, 94, 94, 255)
+    -- 网格线宽度
+    strokeWidth(1)
+    -- 地面颜色
+    fill(5,155,40,255)
+    -- fill(5,155,240,255)
+    rect(x,y,scaleX,scaleY)
+    popMatrix()
 end
 
 -- 游戏主程序框架
