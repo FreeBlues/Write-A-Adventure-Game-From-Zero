@@ -65,7 +65,7 @@ function draw()
     fill(249, 7, 7, 255)
     text(ss, 500,100)
         
-    sysInfo()
+    --sysInfo()
     popStyle()
     popMatrix()
 
