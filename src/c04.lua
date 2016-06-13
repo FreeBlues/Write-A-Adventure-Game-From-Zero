@@ -99,6 +99,7 @@ function touched(touch)
     
 end
 
+--# Status
 -- 角色状态类
 Status = class()
 
@@ -277,7 +278,7 @@ function Status:raderGraph()
     popMatrix()
 end
 
-
+--# Sprites
 -- 帧动画对象类
 Sprites = class() 
 
@@ -331,8 +332,8 @@ function Sprites:draw(w,h)
         self.prevTime = self.prevTime + 0.08 
         self.k = math.fmod(self.i,#self.imgs) 
         self.i = self.i + 1    
-        self.x = self.x + ls.x
-        self.y = self.y + ls.y
+        self.x = self.x + 1
+        self.y = self.y + 1
     end
     self.q=self.q+1
     -- rect(800,500,120,120) 
@@ -347,6 +348,7 @@ function Sprites:draw(w,h)
     -- sprite(imgs[self.index], self.x, self.y)
 end
 
+--# Maps
 Maps = class()
 
 function Maps:init()
