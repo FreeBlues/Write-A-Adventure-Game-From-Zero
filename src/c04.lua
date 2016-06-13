@@ -65,7 +65,7 @@ function draw()
     fill(249, 7, 7, 255)
     text(ss, 500,100)
         
-    --sysInfo()
+    sysInfo()
     popStyle()
     popMatrix()
 
@@ -96,8 +96,22 @@ function touched(touch)
     c1,c2 = myMap:where(m.x,m.y)
     -- 显示角色所处网格坐标
     ss = c1.." : "..c2
-    
 end
+
+-- 系统信息
+function sysInfo()
+    -- 显示FPS和内存使用情况
+    pushStyle()
+    --fill(0,0,0,105)
+    -- rect(650,740,220,30)
+    fill(255, 255, 255, 255)
+    -- 根据 DeltaTime 计算 fps, 根据 collectgarbage("count") 计算内存占用
+    local fps = math.floor(1/DeltaTime)
+    local mem = math.floor(collectgarbage("count"))
+    text("FPS: "..fps.."    Mem："..mem.." KB",650,740)
+    popStyle()
+end
+
 
 --# Status
 -- 角色状态类
