@@ -88,6 +88,11 @@ function drawUnitGround(position)
     popMatrix()
 end
 
+function drawMap() 
+    -- 绘制地图
+    sprite(imgMap,-scaleX,-scaleY)
+end
+
 -- 游戏主程序框架
 function setup()
     displayMode(OVERLAY)
