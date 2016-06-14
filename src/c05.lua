@@ -63,14 +63,16 @@ function setup()
     print("Threads...")
     
     myT = Threads()
-    myT = needLongTime
+    myT.task = needLongTime
     myT:job()
 end
 
 function needLongTime()
 	local sum = 0
-	for i=1,100000 do
+	for i=1,10000000 do
 		sum = sum + i
+		-- 在此插入切换点, 提供暂停控制 
+		myT:switchPoint()  
 	end
 end
 
