@@ -75,7 +75,8 @@ function draw()
     rs:draw()
     fill(249, 7, 7, 255)
     text(ss, 500,100)
-        
+    
+    drawLoadingInfo()
     sysInfo()
     popStyle()
     popMatrix()
@@ -121,6 +122,16 @@ function sysInfo()
     local mem = math.floor(collectgarbage("count"))
     text("FPS: "..fps.."    Mem："..mem.." KB",650,740)
     popStyle()
+end
+
+-- 加载过程提示信息显示
+function drawLoadingInfo()
+    pushStyle()
+    fontSize(60)
+    fill(255,255,0)
+    textMode(CENTER)
+    text("程序加载中...",WIDTH/2,HEIGHT/2)
+    popStyle() 
 end
 
 
