@@ -48,7 +48,7 @@ function draw()
 	-- 根据当前状态选择对应的场景
 	if state == states.loading then
 		drawLoading()
-	elseif state == states.play then
+	elseif state == states.playing then
 		drawPlaying()
 	end	
 	
