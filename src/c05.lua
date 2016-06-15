@@ -43,7 +43,8 @@ function draw()
 	
 	-- 线程分发
     myT:dispatch()
-
+	sysInfo()
+	
 	-- 根据当前状态选择对应的场景
 	if state == states.loading then
 		drawLoading()
@@ -105,8 +106,11 @@ function drawLoading()
     popStyle() 
     popMatrix()
     
-    -- 切换到下一个场景
-    state = states.playing
+    -- 如果任务函数执行完毕, 则修改场景状态
+	if myT.taskStatus == "Finished" then 
+		-- 切换到下一个场景
+		state = states.playing
+	end
 end
 
 --	绘制游戏运行
@@ -461,6 +465,8 @@ function Maps:createMapTable()
             self.mapItem = {pos=vec2(i,j), plant=self:randomPlant(), mineral=self:randomMinerial()}
             --self.mapItem = {pos=vec2(i,j), plant=nil, mineral=nil}
             table.insert(self.mapTable, self.mapItem)
+            -- 插入切换判断点
+            myT:switchPoint()
         end
     end
     print("OK, 地图初始化完成! ")
@@ -625,6 +631,28 @@ function Threads:init()
     self.timeTick = 0.1 
     self.worker = 1
     self.task = function() end
+    self.taskStatus = "Running"
+end
+
+-- 创建协程，分配任务，该函数执行一次即可。
+function Threads:job ()
+	self.taskStatus = "Running"
+	local f = function () self:taskUnit() end
+    -- 为 taskUnit() 函数创建协程。
+    local co = coroutine.create(f)
+    table.insert(self.threads, co)
+end
+
+-- 任务单元，要在本函数中设置好挂起条件
+function Threads:taskUnit()
+	-- 可在此处执行用户的任务函数
+	self.task()
+        
+	-- 切换点, 放在 self.task() 函数内部耗时较长的位置处, 以方便暂停
+	self:switchPoint()      
+	
+	-- 运行到此说明任务全部完成, 设置状态 
+	self.taskStatus = "Finished" 
 end
 
 -- 切换点, 可放在准备暂停的函数内部, 一般选择放在多重循环的最里层, 这里耗时最多
@@ -636,24 +664,6 @@ function Threads:switchPoint()
         coroutine.yield()    
     end
 end
-
--- 计算某个整数区间内所有整数之和，要在本函数中设置好挂起条件
-function Threads:taskUnit()
-	-- 可在此处执行用户的任务函数
-	self.task()
-        
-	-- 切换点, 放在 self.task() 函数内部耗时较长的位置处, 以方便暂停
-	self:switchPoint()      
-end
-
--- 创建协程，分配任务，该函数执行一次即可。
-function Threads:job ()
-	local f = function () self:taskUnit() end
-    -- 为 taskUnit() 函数创建协程。
-    local co = coroutine.create(f)
-    table.insert(self.threads, co)
-end
-
 
 -- 在 draw 中运行的分发器，借用 draw 的循环运行机制，调度所有线程的运行。
 function Threads:dispatch()
