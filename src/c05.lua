@@ -2,7 +2,12 @@
 
 function setup() 
     displayMode(OVERLAY)
-    -- 初始化状态
+    
+    -- 游戏场景状态
+    states = {startup = 0, loading = 1, playing = 2, about = 3}
+	state = states.loading
+	
+    -- 初始化角色状态
     myStatus = Status()
     
     -- 以下为帧动画代码
