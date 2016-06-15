@@ -1,7 +1,5 @@
 -- c05.lua
 
--- c04.lua
-
 function setup() 
     displayMode(OVERLAY)
     -- 初始化状态
@@ -36,51 +34,18 @@ function setup()
 end
 
 function draw()
-    pushMatrix()
-    pushStyle()
-    -- spriteMode(CORNER)
-    rectMode(CORNER)
     background(32, 29, 29, 255)
-    
-    -- 线程分发
+	
+	-- 线程分发
     myT:dispatch()
-    
-    -- 增加移动的背景图: + 为右移，- 为左移
-    --sprite("Documents:bgGrass",(WIDTH/2+10*s*m.i)%(WIDTH),HEIGHT/2)
-    --sprite("Documents:bgGrass",(WIDTH+10*s*m.i)%(WIDTH),HEIGHT/2)
-    -- sprite("Documents:bgGrass",WIDTH/2,HEIGHT/2)
-    ---[[
-    if ls.x ~= 0 then
-        step = 10 *m.i*ls.x/math.abs(ls.x)
-    else
-        step = 0
-    end
-    --]]
-    --sprite("Documents:bgGrass",(WIDTH/2 - step)%(WIDTH),HEIGHT/2)
-    --sprite("Documents:bgGrass",(WIDTH - step)%(WIDTH),HEIGHT/2)
-    
-    -- 绘制地图
-    myMap:drawMap()
-        
-    -- 绘制角色帧动画
-    m:draw(50,80)
-    -- sysInfo()
-    
-    -- 绘制状态栏
-    myStatus:drawUI()
-    --myStatus:raderGraph()
-    
-    -- 绘制操纵杆
-    ls:draw()
-    rs:draw()
-    fill(249, 7, 7, 255)
-    text(ss, 500,100)
-    
-    drawLoadingInfo()
-    sysInfo()
-    popStyle()
-    popMatrix()
 
+	-- 根据当前状态选择对应的场景
+	if state == states.loading then
+		drawLoading()
+	elseif state == states.play then
+		drawPlaying()
+	end	
+	
 end
 
 -- 处理玩家的触摸移动
@@ -125,13 +90,60 @@ function sysInfo()
 end
 
 -- 加载过程提示信息显示
-function drawLoadingInfo()
-    pushStyle()
-    fontSize(60)
+function drawLoading()
+    pushMatrix()
+	pushStyle()
+	fontSize(60)
     fill(255,255,0)
     textMode(CENTER)
-    text("程序加载中...",WIDTH/2,HEIGHT/2)
+    text("游戏加载中...",WIDTH/2,HEIGHT/2)
     popStyle() 
+    popMatrix()
+    
+    -- 切换到下一个场景
+    state = states.playing
+end
+
+--	绘制游戏运行
+function drawPlaying()
+    	pushMatrix()
+    pushStyle()
+    -- spriteMode(CORNER)
+    rectMode(CORNER)
+    background(32, 29, 29, 255)
+          
+    -- 增加移动的背景图: + 为右移，- 为左移
+    --sprite("Documents:bgGrass",(WIDTH/2+10*s*m.i)%(WIDTH),HEIGHT/2)
+    --sprite("Documents:bgGrass",(WIDTH+10*s*m.i)%(WIDTH),HEIGHT/2)
+    -- sprite("Documents:bgGrass",WIDTH/2,HEIGHT/2)
+    ---[[
+    if ls.x ~= 0 then
+        step = 10 *m.i*ls.x/math.abs(ls.x)
+    else
+        step = 0
+    end
+    --]]
+    --sprite("Documents:bgGrass",(WIDTH/2 - step)%(WIDTH),HEIGHT/2)
+    --sprite("Documents:bgGrass",(WIDTH - step)%(WIDTH),HEIGHT/2)
+    
+    -- 绘制地图
+    myMap:drawMap()
+        
+    -- 绘制角色帧动画
+    m:draw(50,80)
+    
+    -- 绘制状态栏
+    myStatus:drawUI()
+    
+    -- 绘制操纵杆
+    ls:draw()
+    rs:draw()
+    fill(249, 7, 7, 255)
+    text(ss, 500,100)
+    
+    sysInfo()
+    popStyle()
+    popMatrix()
 end
 
 
