@@ -68,8 +68,8 @@ function setup()
       
 	-- 开始初始化帧动画类            
     myS = Sprites()
-    myS.m.texture = img2
-    myS.coords = pos2
+    myS.m.texture = img1
+    myS.coords = pos1
     -- 若纹理坐标为绝对数值, 而非相对数值(即范围在[0,1]之间), 则需将其显式转换为相对数值
     myS:convert()
     
@@ -98,8 +98,6 @@ end
 function sysInfo()
     -- 显示FPS和内存使用情况
     pushStyle()
-    --fill(0,0,0,105)
-    -- rect(650,740,220,30)
     fill(255, 255, 255, 255)
     -- 根据 DeltaTime 计算 fps, 根据 collectgarbage("count") 计算内存占用
     local fps = math.floor(1/DeltaTime)
