@@ -394,7 +394,7 @@ void main()
     // 取得像素点的纹理采样
     lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
     
-    if ( col.rgb > maxWhite ) 
+    if ( col.r > maxWhite.x &&  col.g > maxWhite.y && col.b > maxWhite.z)  
     	discard;
     else	    
     	gl_FragColor = col;

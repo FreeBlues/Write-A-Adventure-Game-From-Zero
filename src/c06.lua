@@ -76,7 +76,7 @@ function setup()
     -- 使用自定义 shader
     myS.m.shader = shader(shaders["sprites1"].vs,shaders["sprites1"].fs)
     -- 设置 maxWhite
-    myS.m.shader.maxWhite = 0.8
+    myS.m.shader.maxWhite = vec4(0.8, 0.8, 0.8, 0.8)
 
     -- 设置速度
     myS.speed = 1/20
@@ -183,14 +183,14 @@ varying vec4 vColor;
 uniform sampler2D texture;
 
 // 定义一个用于比较的最小 alpha 值, 由用户自行控制
-uniform float maxWhite;
+uniform vec4 maxWhite;
 
 void main()
 {
     // 取得像素点的纹理采样
     lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
     
-    if ( col.rgb > maxWhite ) 
+    if ( col.r > maxWhite.x &&  col.g > maxWhite.y && col.b > maxWhite.z) 
     	discard;
     else	    
     	gl_FragColor = col;
