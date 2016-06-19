@@ -278,9 +278,9 @@ function setup()
     myS:convert()
     
     -- 使用自定义 shader
-    self.m.shader = shader(shaders["sprites1"].vs,shaders["sprites1"].fs)
+    myS.m.shader = shader(shaders["sprites1"].vs,shaders["sprites1"].fs)
     -- 设置 maxWhite
-    self.m.shader.maxWhite = 0.8
+    myS.m.shader.maxWhite = 0.8
 
     -- 设置速度
     myS.speed = 1/20
@@ -315,8 +315,9 @@ end
 
 -- Shader
 shaders = {
-// 左右翻转着色器
+
 sprites = { vs=[[
+// 左右翻转着色器
 //--------vertex shader---------
 attribute vec4 position;
 attribute vec4 color;
@@ -354,8 +355,9 @@ void main()
 }
 ]]},
 
-// 把白色背景转换为透明着色器
+
 sprites1 = { vs=[[
+// 把白色背景转换为透明着色器
 //--------vertex shader---------
 attribute vec4 position;
 attribute vec4 color;
@@ -384,6 +386,9 @@ varying vec4 vColor;
 // 纹理贴图
 uniform sampler2D texture;
 
+// 定义一个用于比较的最小 alpha 值, 由用户自行控制
+uniform float maxWhite;
+
 void main()
 {
     // 取得像素点的纹理采样
@@ -393,8 +398,8 @@ void main()
     	discard;
     else	    
     	gl_FragColor = col;
+}
 ]]}
-
 }
 ``` 
 
