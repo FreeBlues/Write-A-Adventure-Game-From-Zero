@@ -9,10 +9,8 @@ function Sprites:init()
     self.tex = readImage("Documents:catRunning")
     self.m.texture = self.tex
     self.m.shader = shader(shaders["sprites"].vs,shaders["sprites"].fs)
-    self.coords = {vec4(0,3/4,1/2,1/4), vec4(1/2,3/4,1/2,1/4), 
-    			   vec4(0,2/4,1/2,1/4), vec4(1/2,2/4,1/2,1/4), 
-                   vec4(0,1/4,1/2,1/4), vec4(1/2,1/4,1/2,1/4), 
-                   vec4(0,0,1/2,1/4), vec4(1/2,0,1/2,1/4)}
+    self.coords = {{0,3/4,1/2,1/4}, {1/2,3/4,1/2,1/4}, {0,2/4,1/2,1/4}, {1/2,2/4,1/2,1/4}, 
+                    {0,1/4,1/2,1/4}, {1/2,1/4,1/2,1/4}, {0,0,1/2,1/4}, {1/2,0,1/2,1/4}}
     self.i = 1
     
     local w,h = self.tex.width, self.tex.height
@@ -22,7 +20,7 @@ function Sprites:init()
     self.speed = 1/30
     self.time = os.clock()
     
-    self:convert()
+    --self:convert()
 end
 
 function Sprites:convert()
@@ -73,7 +71,7 @@ function setup()
 	-- 开始初始化帧动画类            
     myS = Sprites()
     myS.tex = img2
-    myS.coords = pos2
+    --myS.coords = pos2
     myS.speed = 1/20
     myS.x = 200
 end
