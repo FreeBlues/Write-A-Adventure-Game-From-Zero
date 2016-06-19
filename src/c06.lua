@@ -56,7 +56,7 @@ function setup()
     displayMode(OVERLAY)
     
     -- 帧动画素材1
-    img1 = readImage("Documents:catRunning")
+    img1 = readImage("Documents:runner")
     pos1 = {{0,0,110,120},{110,0,70,120},{180,0,70,120},{250,0,70,120},
 			{320,0,105,120},{423,0,80,120},{500,0,70,120},{570,0,70,120}}
        
@@ -78,7 +78,7 @@ end
 
 function draw()
     background(39, 31, 31, 255)
-
+    -- 绘制 mesh
     myS:draw()
     sysInfo()
 end
@@ -91,8 +91,6 @@ end
 function sysInfo()
     -- 显示FPS和内存使用情况
     pushStyle()
-    --fill(0,0,0,105)
-    -- rect(650,740,220,30)
     fill(255, 255, 255, 255)
     -- 根据 DeltaTime 计算 fps, 根据 collectgarbage("count") 计算内存占用
     local fps = math.floor(1/DeltaTime)
