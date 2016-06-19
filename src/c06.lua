@@ -6,25 +6,23 @@ Sprites = class()
 
 function Sprites:init()
     self.m = mesh()
-    self.tex = readImage("Documents:catRunning")
-    self.m.texture = self.tex
+    self.m.texture  = readImage("Documents:catRunning")
     self.m.shader = shader(shaders["sprites"].vs,shaders["sprites"].fs)
     self.coords = {{0,3/4,1/2,1/4}, {1/2,3/4,1/2,1/4}, {0,2/4,1/2,1/4}, {1/2,2/4,1/2,1/4}, 
                     {0,1/4,1/2,1/4}, {1/2,1/4,1/2,1/4}, {0,0,1/2,1/4}, {1/2,0,1/2,1/4}}
     self.i = 1
     
-    local w,h = self.tex.width, self.tex.height
-    local ws,hs = WIDTH/w,HEIGHT/h
-    self.x, self.y = w/2,h/2
-    self.mi = self.m:addRect(self.x, self.y,WIDTH/10,HEIGHT/10)
+    local w,h = self.m.texture.width, self.m.texture.height
+    local ws,hs = WIDTH/w, HEIGHT/h
+    self.x, self.y = w/2, h/2
+    self.w, self.h = WIDTH/10, HEIGHT/10
+    self.mi = self.m:addRect(self.x, self.y, self.w, self.h)
     self.speed = 1/30
     self.time = os.clock()
-    
-    --self:convert()
 end
 
 function Sprites:convert()
-	local w, h = self.tex.width, self.tex.height
+	local w, h = self.m.texture.width, self.m.texture.height
 	local n = #self.coords
 	for i = 1, n do
 		self.coords[i][1], self.coords[i][2] = self.coords[i][1]/w, self.coords[i][2]/h
@@ -38,7 +36,7 @@ function Sprites:draw()
     				  self.coords[(self.i-1)%8+1][1], self.coords[(self.i-1)%8+1][2], 
     				  self.coords[(self.i-1)%8+1][3], self.coords[(self.i-1)%8+1][4])
     -- 根据 self.x, self.y 重新设置显示位置
-    self.m:setRect(self.mi, self.x, self.y, WIDTH/10,HEIGHT/10,50)
+    self.m:setRect(self.mi, self.x, self.y, self.w, self.h)
     -- 如果停留时长超过 self.speed，则使用下一帧
     if os.clock() - self.time >= self.speed then
         self.i = self.i + 1
@@ -70,10 +68,12 @@ function setup()
       
 	-- 开始初始化帧动画类            
     myS = Sprites()
-    myS.tex = img2
-    --myS.coords = pos2
+    myS.m.texture = img2
+    myS.coords = pos2
+    -- 若纹理坐标为绝对数值, 而非相对数值(即范围在[0,1]之间), 则需将其显式转换为相对数值
+    myS:convert()
     myS.speed = 1/20
-    myS.x = 200
+    myS.x = 500
 end
 
 function draw()
@@ -117,10 +117,10 @@ uniform mat4 modelViewProjection;
 
 void main()
 {
-vColor = color;
-// vTexCoord = texCoord;
-vTexCoord = vec2(1.0-texCoord.x, texCoord.y);
-gl_Position = modelViewProjection * position;
+    vColor = color;
+    // vTexCoord = texCoord;
+    vTexCoord = vec2(1.0-texCoord.x, texCoord.y);
+    gl_Position = modelViewProjection * position;
 }
 ]],
 fs=[[
@@ -136,9 +136,9 @@ uniform sampler2D texture;
 
 void main()
 {
-// 取得像素点的纹理采样
-lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
-gl_FragColor = col;
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    gl_FragColor = col;
 }
 ]]}
 }
