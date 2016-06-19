@@ -26,19 +26,19 @@ function Sprites:init()
 end
 
 function Sprites:convert()
-	local w, h = self.tex, self.tex.height
+	local w, h = self.tex.width, self.tex.height
 	local n = #self.coords
 	for i = 1, n do
-		coords[i].x, coords[i].y = coords[i].x/w, coords[i].y/h
-		coords[i].z, coords[i].w = coords[i].z/w, coords[i].y/h
+		self.coords[i][1], self.coords[i][2] = self.coords[i][1]/w, self.coords[i][2]/h
+		self.coords[i][3], self.coords[i][4] = self.coords[i][3]/w, self.coords[i][4]/h
 	end
 end
 
 function Sprites:draw()
     -- 依次改变贴图坐标，取得不同的子帧
     self.m:setRectTex(self.mi, 
-    				  self.coords[(self.i-1)%8+1].x,self.coords[(self.i-1)%8+1].y, 
-    				  self.coords[i].z, self.coords[i].w)
+    				  self.coords[(self.i-1)%8+1][1], self.coords[(self.i-1)%8+1][2], 
+    				  self.coords[(self.i-1)%8+1][3], self.coords[(self.i-1)%8+1][4])
     -- 根据 self.x, self.y 重新设置显示位置
     self.m:setRect(self.mi, self.x, self.y, WIDTH/10,HEIGHT/10,50)
     -- 如果停留时长超过 self.speed，则使用下一帧
@@ -87,6 +87,20 @@ end
 
 function touched(touch)
     myS:touched(touch)
+end
+
+-- 系统信息
+function sysInfo()
+    -- 显示FPS和内存使用情况
+    pushStyle()
+    --fill(0,0,0,105)
+    -- rect(650,740,220,30)
+    fill(255, 255, 255, 255)
+    -- 根据 DeltaTime 计算 fps, 根据 collectgarbage("count") 计算内存占用
+    local fps = math.floor(1/DeltaTime)
+    local mem = math.floor(collectgarbage("count"))
+    text("FPS: "..fps.."    Mem："..mem.." KB",650,740)
+    popStyle()
 end
 
 
