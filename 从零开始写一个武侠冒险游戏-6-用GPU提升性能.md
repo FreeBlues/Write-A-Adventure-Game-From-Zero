@@ -1,16 +1,17 @@
-#	从零开始写一个武侠冒险游戏-6-用GPU提升性能
+#	从零开始写一个武侠冒险游戏-6-用GPU提升性能(1)
 
 ##	概述
 
 我们之前所有的绘图工作都是直接使用基本绘图函数来绘制的, 这样写出来的代码容易理解, 不过这些代码基本都是由 `CPU` 来执行的, 实际上现在的移动设备都有着功能不弱的 `GPU`(需要移动设备支持 `OpenGL ES 2.0/3.0`), 本章的目标就是把我们游戏绘图相关的大部分工作都转移到 `GPU` 上, 这样既可以解决我们代码目前存在的一些小问题, 也会有很多额外好处:
 
 -	首先是性能可以得到很大提升, 我们现在的帧速是40左右, 主要是雷达图的实时绘制拖慢了帧速;
--	方便在地图类上实现各种功能:大地图的局部显示, 地图平滑卷动, 地图物体更新后重绘时的效率;
+-	方便在地图类上实现各种功能, 如大地图的局部显示, 地图平滑卷动;
+-	保证地图上的物体状态更新后重绘地图时的效率;
 -	帧动画每次起步时速度忽然加快的问题, 反向移动时角色动作显示为倒退, 需要镜像翻转;
 -	状态栏可以通过 `纹理贴图` 来使用各种中文字体(`Codea`不支持中文字体);
--	可以通过 `shader` 来自己编写各种图形特效.
+-	最大的好处是: 可以通过 `shader` 来自己编写各种图形特效.
 
-在 `Codea` 里使用 `GPU` 的方法就是使用 `mesh` 和 `shader`, 而 `mesh` 本身就是一种内置 `shader`. 还有一个很吸引人的地方就是: 使用 `mesh` 后续可以很容易地把我们的 `2D` 游戏改写为 `3D` 游戏.
+在 `Codea` 里使用 `GPU` 的方法就是使用 `mesh` 和 `shader` 来绘图, 而 `mesh` 本身就是一种内置 `shader`. 还有一个很吸引人的地方就是: 使用 `mesh` 后续可以很容易地把我们的 `2D` 游戏改写为 `3D` 游戏.
 
 所以我们后续会把大部分游戏绘图工作都放到 `GPU` 上, `CPU` 只负责绘制耗费资源很少的操作菜单等`UI` 绘制.
 
@@ -56,9 +57,9 @@ uniform mat4 modelViewProjection;
 
 void main()
 {
-vColor = color;
-vTexCoord = texCoord;
-gl_Position = modelViewProjection * position;
+	vColor = color;
+	vTexCoord = texCoord;
+	gl_Position = modelViewProjection * position;
 }
 ]],
 fs=[[
@@ -74,9 +75,9 @@ uniform sampler2D texture;
 
 void main()
 {
-// 取得像素点的纹理采样
-lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
-gl_FragColor = col;
+	// 取得像素点的纹理采样
+	lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+	gl_FragColor = col;
 }
 ]]}
 }
@@ -106,16 +107,16 @@ function setup()
 	--	把整副帧动画素材设置为纹理贴图
 	m.texture = readImage("Documents:catRunning")
 	--	计算出各子帧的纹理坐标存入表中
-	coords = {vec2(0,3/4), vec2(1/2,3/4), vec2(0,2/4), vec2(1/2,2/4), 
-	          vec2(0,1/4), vec2(1/2,1/4), vec2(0,0), vec2(1/2,0)}
+	coords = {{0,3/4,1/2,1/4}, {1/2,3/4,1/2,1/4}, {0,2/4,1/2,1/4}, {1/2,2/4,1/2,1/4}, 
+			{0,1/4,1/2,1/4}, {1/2,1/4,1/2,1/4}, {0,0,1/2,1/4}, {1/2,0,1/2,1/4}}
 	-- 把第一幅子帧设置为它的纹理坐标
-	m:setRectTex(mi, self.coords[1].x, self.coords[1].y ,1/2, 1/4)
+	m:setRectTex(mi, self.coords[1][1], self.coords[1][2] ,self.coords[1][3], self.coords[1][4])
 	...
 end
 ```
 
 
-因为我们这幅素材图分 `2` 列, `4` 行, 共有 `8` 副子帧, 第一幅子帧在左上角, 所以第一幅子帧对应的纹理坐标就是 `vec2(0,3/4)`, 其余以此类推, 我们把所有子帧的纹理坐标按显示顺序依次存放在一个表中, 后续可以方便地过递增索引来循环显示.
+因为我们这幅素材图分 `2` 列, `4` 行, 共有 `8` 副子帧, 第一幅子帧在左上角, 所以第一幅子帧对应的纹理坐标就是 `{0, 3/4, 1/2, 1/4}`, 其余以此类推, 我们把所有子帧的纹理坐标按显示顺序依次存放在一个表中, 后续可以方便地过递增索引来循环显示.
 
 先在 `setup()` 中设置好 `time` 和 `speed` 的值, 接着在 `draw()` 中可以通过这段代码来控制每帧的显示时间:
 
@@ -135,7 +136,7 @@ end
 
 ```
 	-- 根据 x, y 重新设置显示位置
-	m:setRect(mi, x, y, WIDTH/10, HEIGHT/10)
+	m:setRect(mi, x, y, w, h)
 ```
 
 目前我们的代码需要每副子帧的尺寸一样大, 如果子帧尺寸不一样大的话, 就需要做一个转换, 我们决定让属性纹理坐标表仍然使用真实坐标, 新增一个类方法来把它转换成范围为 `[0,1]` 的表, 如下:
@@ -145,12 +146,13 @@ end
 pos = {{0,0,110,120},{110,0,70,120},{180,0,70,120},{250,0,70,120},
        {320,0,105,120},{423,0,80,120},{500,0,70,120},{570,0,70,120}}
 
+-- 把绝对坐标值转换为相对坐标值
 function convert(coords)
 	local w, h = m.texture.width, m.texture.height
 	local n = #coords
 	for i = 1, n do
-		coords[i].x, coords[i].y = coords[i].x/w, coords[i].y/h
-		coords[i].z, coords[i].w = coords[i].z/w, coords[i].y/h
+		coords[i][1], coords[i][2] = coords[i][1]/w, coords[i][2]/h
+		coords[i][3], coords[i][4] = coords[i][3]/w, coords[i][4]/h
 	end
 end
 ```
@@ -172,54 +174,52 @@ void main()
 
 ```
 
-不过这样处理在每个子帧的尺寸有差异时会出现显示上的问题, 貌似因为纹理坐标不对称, 解决办法是把纹理坐标表子帧的顺序颠倒一下(未验证), 其实最简单的解决办法是把素材处理一下, 让每副子帧的尺寸相同就好了.
+不过这样处理在每个子帧的尺寸有差异时会出现显示上的问题, 貌似因为纹理坐标不对称, 解决办法就是给出一个精确左右对称的纹理坐标, 这样弄起来也挺麻烦, 其实最简单的解决办法是把素材处理一下, 让每副子帧的尺寸相同就好了.
 
 ###	完整代码
 
 写成类的完整代码如下:
 
 ```
+-- c06.lua
+
 --# Shaders
 -- 用 mesh/shader 实现帧动画，把运算量转移到 GPU 上，可用 shader 实现各种特殊效果
 Sprites = class()
 
 function Sprites:init()
     self.m = mesh()
-    self.tex = readImage("Documents:catRunning")
-    self.m.texture = self.tex
+    self.m.texture  = readImage("Documents:catRunning")
     self.m.shader = shader(shaders["sprites"].vs,shaders["sprites"].fs)
-    self.coords = {vec4(0,3/4,1/2,1/4), vec4(1/2,3/4,1/2,1/4), 
-    			   vec4(0,2/4,,1/2,1/4), vec4(1/2,2/4,,1/2,1/4), 
-                   vec4(0,1/4,,1/2,1/4), vec4(1/2,1/4,,1/2,1/4), 
-                   vec4(0,0,,1/2,1/4), vec4(1/2,0,,1/2,1/4)}
+    self.coords = {{0,3/4,1/2,1/4}, {1/2,3/4,1/2,1/4}, {0,2/4,1/2,1/4}, {1/2,2/4,1/2,1/4}, 
+                    {0,1/4,1/2,1/4}, {1/2,1/4,1/2,1/4}, {0,0,1/2,1/4}, {1/2,0,1/2,1/4}}
     self.i = 1
     
-    local w,h = self.tex.width, self.tex.height
-    local ws,hs = WIDTH/w,HEIGHT/h
-    self.x, self.y = w/2,h/2
-    self.mi = self.m:addRect(self.x, self.y,WIDTH/10,HEIGHT/10)
+    local w,h = self.m.texture.width, self.m.texture.height
+    local ws,hs = WIDTH/w, HEIGHT/h
+    self.x, self.y = w/2, h/2
+    self.w, self.h = WIDTH/10, HEIGHT/10
+    self.mi = self.m:addRect(self.x, self.y, self.w, self.h)
     self.speed = 1/30
     self.time = os.clock()
-    
-    self:convert()
 end
 
 function Sprites:convert()
-	local w, h = self.tex, self.tex.height
+	local w, h = self.m.texture.width, self.m.texture.height
 	local n = #self.coords
 	for i = 1, n do
-		coords[i].x, coords[i].y = coords[i].x/w, coords[i].y/h
-		coords[i].z, coords[i].w = coords[i].z/w, coords[i].y/h
+		self.coords[i][1], self.coords[i][2] = self.coords[i][1]/w, self.coords[i][2]/h
+		self.coords[i][3], self.coords[i][4] = self.coords[i][3]/w, self.coords[i][4]/h
 	end
 end
 
 function Sprites:draw()
     -- 依次改变贴图坐标，取得不同的子帧
     self.m:setRectTex(self.mi, 
-    				  self.coords[(self.i-1)%8+1].x,self.coords[(self.i-1)%8+1].y, 
-    				  self.coords[i].z, self.coords[i].w)
+    				  self.coords[(self.i-1)%8+1][1], self.coords[(self.i-1)%8+1][2], 
+    				  self.coords[(self.i-1)%8+1][3], self.coords[(self.i-1)%8+1][4])
     -- 根据 self.x, self.y 重新设置显示位置
-    self.m:setRect(self.mi, self.x, self.y, WIDTH/10,HEIGHT/10,50)
+    self.m:setRect(self.mi, self.x, self.y, self.w, self.h)
     -- 如果停留时长超过 self.speed，则使用下一帧
     if os.clock() - self.time >= self.speed then
         self.i = self.i + 1
@@ -239,7 +239,7 @@ function setup()
     displayMode(OVERLAY)
     
     -- 帧动画素材1
-    img1 = readImage("Documents:catRunning")
+    img1 = readImage("Documents:runner")
     pos1 = {{0,0,110,120},{110,0,70,120},{180,0,70,120},{250,0,70,120},
 			{320,0,105,120},{423,0,80,120},{500,0,70,120},{570,0,70,120}}
        
@@ -251,21 +251,37 @@ function setup()
       
 	-- 开始初始化帧动画类            
     myS = Sprites()
-    myS.tex = img2
+    myS.m.texture = img2
     myS.coords = pos2
+    -- 若纹理坐标为绝对数值, 而非相对数值(即范围在[0,1]之间), 则需将其显式转换为相对数值
+    myS:convert()
     myS.speed = 1/20
-    myS.x = 200
+    myS.x = 500
 end
 
 function draw()
     background(39, 31, 31, 255)
-
+    -- 绘制 mesh
     myS:draw()
     sysInfo()
 end
 
 function touched(touch)
     myS:touched(touch)
+end
+
+-- 系统信息
+function sysInfo()
+    -- 显示FPS和内存使用情况
+    pushStyle()
+    --fill(0,0,0,105)
+    -- rect(650,740,220,30)
+    fill(255, 255, 255, 255)
+    -- 根据 DeltaTime 计算 fps, 根据 collectgarbage("count") 计算内存占用
+    local fps = math.floor(1/DeltaTime)
+    local mem = math.floor(collectgarbage("count"))
+    text("FPS: "..fps.."    Mem："..mem.." KB",650,740)
+    popStyle()
 end
 
 
@@ -284,10 +300,10 @@ uniform mat4 modelViewProjection;
 
 void main()
 {
-vColor = color;
-// vTexCoord = texCoord;
-vTexCoord = vec2(1.0-texCoord.x, texCoord.y);
-gl_Position = modelViewProjection * position;
+    vColor = color;
+    // vTexCoord = texCoord;
+    vTexCoord = vec2(1.0-texCoord.x, texCoord.y);
+    gl_Position = modelViewProjection * position;
 }
 ]],
 fs=[[
@@ -303,13 +319,14 @@ uniform sampler2D texture;
 
 void main()
 {
-// 取得像素点的纹理采样
-lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
-gl_FragColor = col;
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    gl_FragColor = col;
 }
 ]]}
 }
 ``` 
+
 回头来看, 就发现用 `mesh` 改写后的帧动画类既简单又高效.
 
 ##	用 mesh 改写地图类
@@ -323,4 +340,4 @@ gl_FragColor = col;
 [从零开始写一个武侠冒险游戏-3-地图生成](http://my.oschina.net/freeblues/blog/690618)  
 [从零开始写一个武侠冒险游戏-4-第一次整合](http://my.oschina.net/freeblues/blog/690718)  
 [从零开始写一个武侠冒险游戏-5-使用协程](http://my.oschina.net/freeblues/blog/691552)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能](http://my.oschina.net/freeblues/blog/691552)
+[从零开始写一个武侠冒险游戏-6-用GPU提升性能(1)](http://my.oschina.net/freeblues/blog/691552)
