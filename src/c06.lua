@@ -72,6 +72,13 @@ function setup()
     myS.coords = pos2
     -- 若纹理坐标为绝对数值, 而非相对数值(即范围在[0,1]之间), 则需将其显式转换为相对数值
     myS:convert()
+    
+    -- 使用自定义 shader
+    self.m.shader = shader(shaders["sprites1"].vs,shaders["sprites1"].fs)
+    -- 设置 maxWhite
+    self.m.shader.maxWhite = 0.8
+
+    -- 设置速度
     myS.speed = 1/20
     myS.x = 500
 end
@@ -91,6 +98,8 @@ end
 function sysInfo()
     -- 显示FPS和内存使用情况
     pushStyle()
+    --fill(0,0,0,105)
+    -- rect(650,740,220,30)
     fill(255, 255, 255, 255)
     -- 根据 DeltaTime 计算 fps, 根据 collectgarbage("count") 计算内存占用
     local fps = math.floor(1/DeltaTime)
@@ -102,6 +111,7 @@ end
 
 -- Shader
 shaders = {
+// 左右翻转着色器
 sprites = { vs=[[
 //--------vertex shader---------
 attribute vec4 position;
@@ -138,5 +148,47 @@ void main()
     lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
     gl_FragColor = col;
 }
+]]},
+
+// 把白色背景转换为透明着色器
+sprites1 = { vs=[[
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+    vColor = color;
+    vTexCoord = texCoord;
+    gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    
+    if ( col.rgb > maxWhite ) 
+    	discard;
+    else	    
+    	gl_FragColor = col;
 ]]}
+
 }

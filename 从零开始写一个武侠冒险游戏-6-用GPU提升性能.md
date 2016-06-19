@@ -115,7 +115,6 @@ function setup()
 end
 ```
 
-
 因为我们这幅素材图分 `2` 列, `4` 行, 共有 `8` 副子帧, 第一幅子帧在左上角, 所以第一幅子帧对应的纹理坐标就是 `{0, 3/4, 1/2, 1/4}`, 其余以此类推, 我们把所有子帧的纹理坐标按显示顺序依次存放在一个表中, 后续可以方便地过递增索引来循环显示.
 
 先在 `setup()` 中设置好 `time` 和 `speed` 的值, 接着在 `draw()` 中可以通过这段代码来控制每帧的显示时间:
@@ -174,7 +173,29 @@ void main()
 
 ```
 
-不过这样处理在每个子帧的尺寸有差异时会出现显示上的问题, 貌似因为纹理坐标不对称, 解决办法就是给出一个精确左右对称的纹理坐标, 这样弄起来也挺麻烦, 其实最简单的解决办法是把素材处理一下, 让每副子帧的尺寸相同就好了.
+不过这样处理在每个子帧的尺寸有差异时会出现显示上的问题, 因为我们的纹理坐标是手工计算出来的, 它所确定的子帧不是严格对称的, 解决办法就是给出一个精确左右对称的纹理坐标, 这样弄起来也挺麻烦, 其实最简单的解决办法是把素材处理一下, 让每副子帧的尺寸相同就好了.
+
+###	用 shader 去掉白色背景
+
+在使用 `runner` 素材时, 因为它的背景是白色, 需要处理成透明, 之前我们专门写了一个函数 `Sprites:deal()` 预先对图像做了处理, 现在我们换一种方式, 直接在 `shader` 里处理, 也很简单, 就是在用取样函数得到当前像素的颜色时, 看看它是不是白色,若是则使用 `shader` 内置函数 `discard` 将其丢弃, 注意, 这里的颜色值必须写成带小数点的形式, 因为它是一个浮点类型, 对应的 `fragment shader` 代码如下:
+
+```
+// 定义一个用于比较的最小 alpha 值, 由用户自行控制
+uniform float maxWhite;
+
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    
+    if ( col.rgb > maxWhite ) 
+    	discard;
+    else	    
+    	gl_FragColor = col;
+}
+```
+
+发现还有个小问题, 就是修改了 `self.w` 和 `self.h` 后, 显示的区域出现了错误, 需要找找原因.
 
 ###	完整代码
 
@@ -255,6 +276,13 @@ function setup()
     myS.coords = pos2
     -- 若纹理坐标为绝对数值, 而非相对数值(即范围在[0,1]之间), 则需将其显式转换为相对数值
     myS:convert()
+    
+    -- 使用自定义 shader
+    self.m.shader = shader(shaders["sprites1"].vs,shaders["sprites1"].fs)
+    -- 设置 maxWhite
+    self.m.shader.maxWhite = 0.8
+
+    -- 设置速度
     myS.speed = 1/20
     myS.x = 500
 end
@@ -287,6 +315,7 @@ end
 
 -- Shader
 shaders = {
+// 左右翻转着色器
 sprites = { vs=[[
 //--------vertex shader---------
 attribute vec4 position;
@@ -323,11 +352,57 @@ void main()
     lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
     gl_FragColor = col;
 }
+]]},
+
+// 把白色背景转换为透明着色器
+sprites1 = { vs=[[
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+    vColor = color;
+    vTexCoord = texCoord;
+    gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    
+    if ( col.rgb > maxWhite ) 
+    	discard;
+    else	    
+    	gl_FragColor = col;
 ]]}
+
 }
 ``` 
 
-回头来看, 就发现用 `mesh` 改写后的帧动画类既简单又高效.
+回头来看, 就发现用 `mesh` 改写后的帧动画类既简单又高效. 而且有了 `shader` 这个大杀器, 我们可以非常方便地为角色添加各种特效, 上面用过的 `镜像` 就是一种简单的特效, 我们在这里稍作演示.
+
+##	在帧动画角色上用 shader 增加特效
+
+
 
 ##	用 mesh 改写地图类
 
