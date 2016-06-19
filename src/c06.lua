@@ -10,9 +10,9 @@ function Sprites:init()
     self.m.texture = self.tex
     self.m.shader = shader(shaders["sprites"].vs,shaders["sprites"].fs)
     self.coords = {vec4(0,3/4,1/2,1/4), vec4(1/2,3/4,1/2,1/4), 
-    			   vec4(0,2/4,,1/2,1/4), vec4(1/2,2/4,,1/2,1/4), 
-                   vec4(0,1/4,,1/2,1/4), vec4(1/2,1/4,,1/2,1/4), 
-                   vec4(0,0,,1/2,1/4), vec4(1/2,0,,1/2,1/4)}
+    			   vec4(0,2/4,1/2,1/4), vec4(1/2,2/4,1/2,1/4), 
+                   vec4(0,1/4,1/2,1/4), vec4(1/2,1/4,1/2,1/4), 
+                   vec4(0,0,1/2,1/4), vec4(1/2,0,1/2,1/4)}
     self.i = 1
     
     local w,h = self.tex.width, self.tex.height
