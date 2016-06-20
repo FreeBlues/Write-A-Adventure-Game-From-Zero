@@ -201,7 +201,17 @@ void main()
 
 试着执行一下, 发现效果还不错.
 
-发现还有个小问题, 就是修改了 `self.w` 和 `self.h` 后, 显示的区域出现了错误, 需要找找原因.
+发现还有个小问题, 就是修改了 `self.w` 和 `self.h` 后, 显示的区域出现了错误, 看了代码, 需要在 `Sprites:init()` 中修改一下, 修改前为:
+
+```
+	self.mi = self.m:addRect(self.x, self.y, self.w, self.h)
+```
+
+修改后为:
+
+```
+	self.mi = self.m:addRect(self.x, self.y, w, h)
+```
 
 ###	完整代码
 
