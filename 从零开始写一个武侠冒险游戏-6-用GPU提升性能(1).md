@@ -287,6 +287,7 @@ function setup()
     myS.m.shader = shader(shaders["sprites1"].vs,shaders["sprites1"].fs)
     -- 设置 maxWhite
     myS.m.shader.maxWhite = 0.8
+    
 
     -- 设置速度
     myS.speed = 1/20
@@ -413,19 +414,226 @@ void main()
 
 ##	在帧动画角色上用 shader 增加特效
 
-###	全部灰色
+###	角色灰化
 
-一些游戏, 比如 `魔兽世界`, 在玩家控制的角色死亡时, 会进入灵魂状态, 这时所有的画面全部变为灰色, 我们也可以在这里写一段 `shader` 来实现这个效果.
+一些游戏, 比如 `魔兽世界`, 在玩家控制的角色死亡时, 会进入灵魂状态, 这时所有的画面全部变为灰色, 我们也可以在这里写一段 `shader` 来实现这个效果, 不过我们打算稍作修改, 只把玩家角色变为灰色, 屏幕上的其余部分都保持原色.
 
-先写一个从彩色到灰度的转换函数
+先写一个从彩色到灰度的转换函数, 这个函数要在 `fragment shader` 中使用:
 
 ```
----今天先写这么多, 明天再继续...
+float intensity(vec4 col) {
+    // 计算像素点的灰度值
+    return 0.3*col.x + 0.59*col.y + 0.11*col.z;
+}
 ```
 
-##	用 mesh 改写地图类
+然后修改片段着色代码:
 
-地图类的处理相对来说复杂一些, 它可以从两个层面使用 `mesh`, 一个是
+```
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    col.rgb = vec3(intensity(col));
+    gl_FragColor = col;
+}
+```
+
+如果我们希望在灰化的同时实现虚化, 也就是让角色变淡, 可以连 `alpha` 一起修改, 这种淡化特效可以用于角色使用了隐匿技能后的显示, 代码如下:
+
+```
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    col.rgba = vec4(intensity(col));
+    gl_FragColor = col;
+}
+```
+
+效果很不错, 完全达到了我们的预定目标.
+
+###	中毒状态
+
+很多游戏中, 角色如果中毒了, 会在两个地方显示出来, 一个是状态栏, 一个是角色本身, 比如 `仙剑奇侠传` 中会给角色渲染一层深绿色, 我们用 `shader` 实现的话, 只需要把取样得到的像素点颜色乘以一个指定的颜色值(绿色或其他), 该指定颜色可随时间变化而变深, 也可以因为吃了解毒药而逐渐变浅(在我们的设定里不存在一吃药就变好的情况, 只能慢慢好), 这部分处理可以充分利用 `mesh` 的一个方法 `setRectColor()` 来实现, 代码如下:
+
+```
+function setup()
+	...
+	myS.m:setRectColor(myS.mi, 0, 255,0,255)
+	...
+```
+
+`shader` 中只需要把取样点的颜色跟该颜色`vColor`相乘即可, 我们的模板代码就是这样的:
+
+```
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    gl_FragColor = col;
+```
+
+所以我们只需要在 `setup()` 中设置一下, 然后调用名为 `sprites` 的 `shader` 即可.
+
+效果完美, 后面可以根据游戏需要再加一个根据时间流逝绿色变淡或者变深的处理.
+
+角色的其他状态, 例如受伤出血也可以通过类似的方法实现(把 `vColor` 改为红色即可), 可自行试验.
+
+###	角色光粒子化
+
+实际上, 我们上面实现的几种特效都是比较简单的, 最后我们来一个复杂点的, 角色升华, 变成光粒子消散在空中, 当然这种特效也可以放在 `NPC` 身上, 代码如下:
+
+```
+---后续补充
+```
+
+
+###	本章用到的 shader 代码
+
+下面列出我们在这里用于实行各种特性的 `shader` 代码:
+
+```
+-- Shader
+shaders = {
+
+sprites = { vs=[[
+// 左右翻转着色器
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+    vColor = color;
+    // vTexCoord = texCoord;
+    vTexCoord = vec2(1.0-texCoord.x, texCoord.y);
+    gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    gl_FragColor = col;
+}
+]]},
+
+
+sprites1 = { vs=[[
+// 把白色背景转换为透明着色器
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+    vColor = color;
+    vTexCoord = texCoord;
+    gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+// 定义一个用于比较的最小 alpha 值, 由用户自行控制
+uniform vec4 maxWhite;
+
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    
+    if ( col.r > maxWhite.x &&  col.g > maxWhite.y && col.b > maxWhite.z) 
+    	discard;
+    else	    
+    	gl_FragColor = col;
+}
+]]},
+
+
+sprites2 = { vs=[[
+// 局部变灰
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+    vColor = color;
+    vTexCoord = texCoord;
+    gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+float intensity(vec4 col) {
+    // 计算像素点的灰度值
+    return 0.3*col.x + 0.59*col.y + 0.11*col.z;
+}
+
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    col.rgba = vec4(intensity(col));
+    gl_FragColor = col;
+}
+]]}
+}
+```
+
+##	本章小结
+
+使用 `mesh`绘图时, 可以选择不加载 `shader`, 如果需要自定义修改图像中的某些显示效果, 就要选择加载 `shader` 了.
+
+关于帧动画类的 `GPU` 改造暂时就写这么多, 下一节准备说说如何用 `mesh` 来改写地图类.
 
 ## 所有章节链接
 
