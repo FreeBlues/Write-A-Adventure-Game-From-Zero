@@ -47,10 +47,26 @@ function Maps:init()
     
     -- 根据地图大小申请图像
     local w,h = (self.gridCount+1)*self.scaleX, (self.gridCount+1)*self.scaleY
-    print(w,h)
+    -- print(w,h)
     self.imgMap = image(w,h)
     
-    -- 使用 mesh 绘制地图
+    -- 使用 mesh 绘制第一层面的地图 
+    
+    self.m1 = mesh()
+    self.m1.texture = readImage("Documents:3D-Wall")
+    local tw,th = self.m1.texture.width, self.m1.texture.height
+    local mw,mh = (self.gridCount+1)*tw, (self.gridCount+1)*th
+    -- 临时调试用, 调试通过后删除
+    self.imgMap1 = image(mw, mh)
+    -- local ws,hs = WIDTH/tw, HEIGHT/th
+    local ws,hs = mw/tw, mh/th
+    print(ws,hs)
+    self.m1i = self.m1:addRect(mw/2, mh/2, mw, mh)
+    self.m1:setRectTex(self.m1i, 1/2, 1/2, ws, hs)
+    -- 使用拼图 shader
+    self.m1.shader = shader(shaders["sprites3"].vs,shaders["sprites3"].fs)
+    
+    -- 使用 mesh 绘制第二层面的地图
     -- 设置当前位置为矩形中心点的绝对数值，分别除以 w, h 可以得到相对数值
     self.x, self.y = (w/2-WIDTH/2), (h/2-HEIGHT/2)
     self.m = mesh()
@@ -102,7 +118,7 @@ function Maps:drawMap()
 	local w,h = self.imgMap.width, self.imgMap.height
 	local u,v = WIDTH/w, HEIGHT/h
 	-- 增加判断，若角色移动到边缘则切换地图：通过修改贴图坐标来实现
-	print(self.x,self.y)
+	-- print(self.x,self.y)
 	local left,right,top,bottom = WIDTH/10, WIDTH*9/10, HEIGHT/10, HEIGHT*9/10
 	local ss = 800
 	if myS.x <= left then self.x= self.x - WIDTH/ss end
@@ -136,6 +152,13 @@ function Maps:createMapTable()
     end
     print("OK, 地图初始化完成! ")
     self:updateMap()
+end
+
+-- 临时调试用
+function Maps:updateMap1()
+    setContext(self.imgMap)   
+    m1:draw()
+    setContext()
 end
 
 -- 根据地图数据表, 刷新地图，比较耗时，可以考虑使用协程，每 1 秒内花 1/60 秒来执行它；
@@ -239,3 +262,173 @@ function Maps:drawMineral(position,mineral)
     --text(mineral,x+self.scaleX/2,y)
     popMatrix()
 end
+
+-- Shader
+shaders = {
+
+sprites = { vs=[[
+// 左右翻转着色器
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+    vColor = color;
+    // vTexCoord = texCoord;
+    vTexCoord = vec2(1.0-texCoord.x, texCoord.y);
+    gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    gl_FragColor = col;
+}
+]]},
+
+
+sprites1 = { vs=[[
+// 把白色背景转换为透明着色器
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+    vColor = color;
+    vTexCoord = texCoord;
+    gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+// 定义一个用于比较的颜色值, 由用户自行控制
+uniform vec4 maxWhite;
+
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    
+    if ( col.r > maxWhite.x &&  col.g > maxWhite.y && col.b > maxWhite.z) 
+    	discard;
+    else	    
+    	gl_FragColor = col;
+}
+]]},
+
+sprites2 = { vs=[[
+// 局部变灰
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+    vColor = color;
+    vTexCoord = texCoord;
+    gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+float intensity(vec4 col) {
+    // 计算像素点的灰度值
+    return 0.3*col.x + 0.59*col.y + 0.11*col.z;
+}
+
+void main()
+{
+    // 取得像素点的纹理采样
+    lowp vec4 col = texture2D( texture, vTexCoord ) * vColor;
+    col.rgba = vec4(intensity(col));
+    gl_FragColor = col;
+}
+]]},
+
+sprites3 = { vs=[[
+// 拼图着色器: 把小纹理素材拼接起来铺满整个屏幕
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+	vColor = color;
+	vTexCoord = texCoord;
+	gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+void main()
+{
+	vec4 col = texture2D(texture,vec2(mod(vTexCoord.x,1.0), mod(vTexCoord.y,1.0)));
+	gl_FragColor = vColor * col;
+}
+]]}
+}

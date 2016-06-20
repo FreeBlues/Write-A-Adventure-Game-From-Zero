@@ -86,8 +86,7 @@
 	if myS.y >= top then self.y = self.y + HEIGHT/ss end
 	
 	-- 根据计算得到的数据重新设置纹理坐标
-	self.m:setRectTex(self.mi, self.x/w, self.y/h, u, v)
-   
+	self.m:setRectTex(self.mi, self.x/w, self.y/h, u, v)  
 	...
 ```
 
@@ -154,7 +153,7 @@ function Maps:init()
     
     -- 根据地图大小申请图像
     local w,h = (self.gridCount+1)*self.scaleX, (self.gridCount+1)*self.scaleY
-    print(w,h)
+    -- print(w,h)
     self.imgMap = image(w,h)
     
     -- 使用 mesh 绘制地图
@@ -209,7 +208,7 @@ function Maps:drawMap()
 	local w,h = self.imgMap.width, self.imgMap.height
 	local u,v = WIDTH/w, HEIGHT/h
 	-- 增加判断，若角色移动到边缘则切换地图：通过修改贴图坐标来实现
-	print(self.x,self.y)
+	-- print(self.x,self.y)
 	local left,right,top,bottom = WIDTH/10, WIDTH*9/10, HEIGHT/10, HEIGHT*9/10
 	local ss = 800
 	if myS.x <= left then self.x= self.x - WIDTH/ss end
@@ -349,6 +348,116 @@ end
 ```
 
 ###	再改写第一层面
+
+现在开始把第一层面改写为用 `mesh` 绘图, 也就是说以 `mesh` 方式来生成大地图, 具体来说就是改写这些函数:
+
+-	`Maps:updateMap()` 负责把所有的绘制函数整合起来, 绘制出整副地图
+-	`Maps:drawGround()` 负责绘制单位格子地面
+-	`Maps:drawTree()` 负责绘制单位格子内的植物
+-	`Maps:drawMineral()` 负责绘制单位格子内的矿物
+
+这里稍微麻烦一些, 因为我们打算用小纹理贴图来拼接, 所以一旦小纹理确定, 那么这些属性就不需要显式指定了:
+
+-	`self.scaleX` = 40
+-	`self.scaleY` = 40
+ 
+它们实际上就是小纹理贴图的 `宽度` 和 `高度`, 假设使用名为 `tex` 的小纹理, 那么这两个值就分别是 `tex.width` 和 `tex.height`, 虽然我们一般提倡使用正方形的纹理, 不过这里还是区分了 `宽度` 和 `高度`.
+
+而矩形的大小, 则可以通过属性 `self.gridCount = 100` 来设定需要用到多少块小纹理, 这里设置的是 `100`, 表示横向使用 `100` 块小纹理, 纵向使用 `100` 块小纹理. 
+
+看起来这次改写涉及的地方比较多, 包括整个类结构
+
+####	具体实现方法
+
+这里还是通过 `mesh` 的纹理贴图功能来实现, 不过跟在第一层面的用法不同, 这里我们会使用很小的纹理贴图, 比如大小为 `50*50` 像素单位, 通过纹理坐标的设置和 `shader` 把它们拼接起来铺满整个地图, 之所以要用到 `shader`, 是因为在这里, 我们提供纹理坐标的取值大于 `[0,1]` 的范围, 必须在 `shader` 中对纹理坐标做一个转换, 让它们重新落回到 `[0,1]` 的区间.
+
+比如假设我们程序提供的纹理坐标是 `(23.4, 20.8)`, 前面的整数部分 `(23, 20)` 代表的都是整块的纹理图, 相当于横向有 `23` 个贴图, 纵向有 `20` 个贴图, 那么剩下的小数部分 `(0.4, 0.8)` 就会落在一块小纹理素材图内, 这个 `(0.4, 0.8)` 才是我们真正要取的点.
+
+####	绘制地面
+
+我们先从地面开始, 先新建一个名为 `m1` 的 `mesh`, 接着在这个 `mesh` 上新建一个大大的矩形, 简单来说就是跟我们的地图一样大, 再加载一个尺寸较小的地面纹理贴图, 通过纹理坐标的设置和 `shader` 的处理把它以拼图的方式铺满整个矩形, 最后用函数 `m1:draw()` 把它绘制到 `self.img` 上, 不过为方便调试, 我们先临时增加一个属性 `self.img1`, 所有改写部分先在它上面绘制, 调试无误后再绘制到 `self.imgMap1` 上.
+
+初始化函数 `Maps:init()` 中需要增加的代码
+
+```
+	-- 使用 mesh 绘制第一层面的地图 
+    self.m1 = mesh()
+    self.m1.texture = readImage("Documents:3D-Wall")
+    local tw,th = self.m1.texture.width, self.m1.texture.height
+    local mw,mh = (self.gridCount+1)*tw, (self.gridCount+1)*th
+    -- 临时调试用, 调试通过后删除
+    self.imgMap1 = image(mw, mh)
+    -- local ws,hs = WIDTH/tw, HEIGHT/th
+    local ws,hs = mw/tw, mh/th
+    print(ws,hs)
+    self.m1i = self.m1:addRect(mw/2, mh/2, mw, mh)
+    self.m1:setRectTex(self.m1i, 1/2, 1/2, ws, hs)
+    -- 使用拼图 shader
+    self.m1.shader = shader(shaders["sprites3"].vs,shaders["sprites3"].fs)
+  
+```
+
+因为需要修改的地方较多, 为避免引入新问题, 所以保留原来的处理, 临时增加几个函数, 专门用于调试:
+
+```
+-- 临时调试用
+function Maps:updateMap1()
+    setContext(self.imgMap)   
+    m1:draw()
+    setContext()
+end
+```
+
+另外需要在增加一个专门用于拼图的  `shader`:
+
+```
+-- Shader
+shaders = {
+
+...
+sprites3 = { vs=[[
+// 拼图着色器: 把小纹理素材拼接起来铺满整个屏幕
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+	vColor = color;
+	vTexCoord = texCoord;
+	gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+void main()
+{
+	vec4 col = texture2D(texture,vec2(mod(vTexCoord.x,1.0), mod(vTexCoord.y,1.0)));
+	gl_FragColor = vColor * col;
+}
+]]}
+...
+```
+
+####	绘制植物
+
+####	绘制矿物
+
 
 ###	完整代码
 
