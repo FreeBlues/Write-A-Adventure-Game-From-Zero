@@ -1,4 +1,4 @@
--- c06.lua
+-- c06-01.lua
 
 --# Shaders
 -- 用 mesh/shader 实现帧动画，把运算量转移到 GPU 上，可用 shader 实现各种特殊效果
@@ -16,7 +16,7 @@ function Sprites:init()
     local ws,hs = WIDTH/w, HEIGHT/h
     self.x, self.y = w/2, h/2
     self.w, self.h = WIDTH/10, HEIGHT/10
-    self.mi = self.m:addRect(self.x, self.y, self.w, self.h)
+    self.mi = self.m:addRect(self.x, self.y, w, h)
     self.speed = 1/30
     self.time = os.clock()
 end
