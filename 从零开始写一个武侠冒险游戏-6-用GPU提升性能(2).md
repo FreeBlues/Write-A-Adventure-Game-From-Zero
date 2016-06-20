@@ -393,7 +393,7 @@ end
     self.m1i = self.m1:addRect(mw/2, mh/2, mw, mh)
     self.m1:setRectTex(self.m1i, 1/2, 1/2, ws, hs)
     -- 使用拼图 shader
-    self.m1.shader = shader(shaders["sprites3"].vs,shaders["sprites3"].fs)
+    self.m1.shader = shader(shaders["maps"].vs,shaders["maps"].fs)
   
 ```
 
@@ -414,8 +414,7 @@ end
 -- Shader
 shaders = {
 
-...
-sprites3 = { vs=[[
+maps = { vs=[[
 // 拼图着色器: 把小纹理素材拼接起来铺满整个屏幕
 //--------vertex shader---------
 attribute vec4 position;
@@ -451,7 +450,7 @@ void main()
 	gl_FragColor = vColor * col;
 }
 ]]}
-...
+}
 ```
 
 ####	绘制植物
