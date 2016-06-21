@@ -365,7 +365,7 @@ end
 
 而矩形的大小, 则可以通过属性 `self.gridCount = 100` 来设定需要用到多少块小纹理, 这里设置的是 `100`, 表示横向使用 `100` 块小纹理, 纵向使用 `100` 块小纹理. 
 
-看起来这次改写涉及的地方比较多, 包括整个类结构
+看起来这次改写涉及的地方比较多.
 
 ####	具体实现方法
 
@@ -498,6 +498,8 @@ function Maps:updateMap()
 end
 ``` 
 
+还有其他几个函数就不一一列举了, 因为修改的地方很清晰.
+
 ####	增加一些用于交互的函数
 
 这个游戏程序写了这么久了, 玩家控制的角色还没有真正对地图上的物体做过交互, 这里我们增加几个用于操作地图上物体的函数:
@@ -541,7 +543,7 @@ end
 
 ####	绘制植物
 
-要修改函数 `Maps:drawTree()`, 因为原来是根据 `self.scaleX, self.scaleY` 和网格坐标 `i, j` 来计算绘制到哪个格子上的, 现在因为地面用小纹理贴图绘制, 所以就要用小纹理贴图的 `width, height` 来计算了
+要修改函数 `Maps:drawTree()`, 原来是根据 `self.scaleX, self.scaleY` 和网格坐标 `i, j` 来计算绘制到哪个格子上的, 现在因为地面改用 `mesh` 的纹理贴图绘制, 所以就要用地面纹理贴图的 `width, height` 来计算了.
 
 ```
 -- 临时调试用
@@ -552,9 +554,6 @@ function Maps:drawTree(position,plant)
     pushMatrix()
     -- 绘制植物图像
     sprite(self.itemTable[plant],x,y,w*6/10,h)
-    
-    --fill(100,100,200,255)
-    --text(plant,x,y)
     popMatrix()
 end
 ```
@@ -570,7 +569,6 @@ function Maps:drawMineral(position,mineral)
     pushMatrix()
     -- 绘制矿物图像
     sprite(self.itemTable[mineral], x+w/2, y , w/2, h/2)
-
     --fill(100,100,200,255)
     --text(mineral,x+self.scaleX/2,y)
     popMatrix()
@@ -946,26 +944,57 @@ void main()
 
 ##	在地图上用 shader 增加特效
 
-###	气候变化(下雨,下雪,雷电,迷雾,春夏秋冬)
+到目前为止, 我们对地图类的改写基本完成, 调试通过后, 剩下的就是利用 `shader` 来为地图增加一些特效了.
+
+本来打算写写下面这些特效:
+
+###	气候变化
+
+下雨,下雪,雷电,迷雾,狂风
+
+###	季节变化
+
+春夏秋冬四季变化
 
 ###	昼夜变化
 
+光线随时间改变明暗程度
+
 ###	流动的河流
+
+让河流动起来
 
 ###	波光粼粼的湖泊
 
+湖泊表面闪烁
+
 ###	树木(可使用广告牌-在3D阶段实现)
+
+用广告牌实现的树木
 
 ###	地面凹凸阴影(2D 和 3D)
 
+让地面产生动态阴影变化
+
 ###	天空盒子(3D)
+
+搞一个立方体纹理特贴图
+
+但是一看本章已经写了太长的篇幅了, 所以决定把这些内容放到后面单列一章, 因此本章到此结束.
 
 ## 本章小结
 
-临时想到的:
+本章成功实现了如下目标:
 
--	利用生命游戏的规则, 让随机生成的植物演化一段时间, 以便形成群落
--	需要解决走到地图尽头的问题, 加一个判断, 让图片首尾衔接
+-	用 `mesh` 绘制地图, 用 `mesh` 显示地图
+-	利用 `mesh` 的纹理坐标机制解决了地图自动卷动
+-	增加了用户跟地图物体的交互处理
+-	为后续的地图特效提供了 `shader`.	
+
+临时想到的问题, 后续解决:
+
+-	利用生命游戏的规则, 让随机生成的植物演化一段时间, 以便形成更具真实感的群落
+-	需要解决走到地图尽头的问题, 加一个处理, 让图片首尾衔接
 
 ## 所有章节链接
 
@@ -992,7 +1021,9 @@ Air:Write-A-Adventure-Game-From-Zero admin$ tree
 │   ├── c04.lua
 │   ├── c05.lua
 │   ├── c06-01.lua
+│   ├── c06-02.lua
 │   └── c06.lua
+├── 从零开始写一个武侠冒险游戏-0-开发框架Codea简介.md
 ├── 从零开始写一个武侠冒险游戏-1-状态原型.md
 ├── 从零开始写一个武侠冒险游戏-2-帧动画.md
 ├── 从零开始写一个武侠冒险游戏-3-地图生成.md
@@ -1001,7 +1032,7 @@ Air:Write-A-Adventure-Game-From-Zero admin$ tree
 ├── 从零开始写一个武侠冒险游戏-6-用GPU提升性能(1).md
 └── 从零开始写一个武侠冒险游戏-6-用GPU提升性能(2).md
 
-2 directories, 22 files
+2 directories, 24 files
 Air:Write-A-Adventure-Game-From-Zero admin$ 
 ```
 
@@ -1013,4 +1044,4 @@ Air:Write-A-Adventure-Game-From-Zero admin$
 [从零开始写一个武侠冒险游戏-4-第一次整合](http://my.oschina.net/freeblues/blog/690718)  
 [从零开始写一个武侠冒险游戏-5-使用协程](http://my.oschina.net/freeblues/blog/691552)  
 [从零开始写一个武侠冒险游戏-6-用GPU提升性能(1)](http://my.oschina.net/freeblues/blog/694246)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(2)](http://my.oschina.net/freeblues/blog/694246)
+[从零开始写一个武侠冒险游戏-6-用GPU提升性能(2)](http://my.oschina.net/freeblues/blog/698529)

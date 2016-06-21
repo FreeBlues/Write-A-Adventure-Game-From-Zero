@@ -215,6 +215,18 @@ void main()
 	self.mi = self.m:addRect(self.x, self.y, w, h)
 ```
 
+另外, 在移动角色时加了一个判断, 避免它走出屏幕范围, 代码如下:
+
+```
+	-- 根据 self.x, self.y 重新设置整幅图的显示位置，走到边缘则不再前进
+    local l,r,b,t = WIDTH/16,WIDTH*15/16,HEIGHT/16,HEIGHT*15/16
+    if self.x >= l and self.x <= r and self.y >= b and self.y <= t then
+    	self.m:setRect(self.mi, self.x, self.y, self.w, self.h)
+    end
+```
+
+不过有些切换不太灵活, 后续需要找一下原因.
+
 ###	完整代码
 
 写成类的完整代码如下:
@@ -257,8 +269,13 @@ function Sprites:draw()
     self.m:setRectTex(self.mi, 
     				  self.coords[(self.i-1)%8+1][1], self.coords[(self.i-1)%8+1][2], 
     				  self.coords[(self.i-1)%8+1][3], self.coords[(self.i-1)%8+1][4])
-    -- 根据 self.x, self.y 重新设置显示位置
-    self.m:setRect(self.mi, self.x, self.y, self.w, self.h)
+    
+    -- 根据 self.x, self.y 重新设置整幅图的显示位置，走到边缘则不再前进
+    local l,r,b,t = WIDTH/16,WIDTH*15/16,HEIGHT/16,HEIGHT*15/16
+    if self.x >= l and self.x <= r and self.y >= b and self.y <= t then
+    	self.m:setRect(self.mi, self.x, self.y, self.w, self.h)
+    end
+    
     -- 如果停留时长超过 self.speed，则使用下一帧
     if os.clock() - self.time >= self.speed then
         self.i = self.i + 1
