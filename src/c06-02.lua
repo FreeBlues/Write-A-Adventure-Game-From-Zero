@@ -14,7 +14,7 @@ function setup()
     myMap = Maps()
     myMap:createMapTable()
     print("左下角在地图的坐标："..myMap.x,myMap.y)
-    local i,j = myMap:where1(myMap.x,myMap.y)
+    local i,j = myMap:where(myMap.x,myMap.y)
     print("左下角对应网格坐标："..i.." : "..j)
     -- print(myMap.mapTable[9][10].pos, myMap.mapTable[9][10].plant)
     -- 测试格子坐标计算
