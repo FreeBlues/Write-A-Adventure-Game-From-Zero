@@ -607,7 +607,7 @@ function setup()
     myMap = Maps()
     myMap:createMapTable()
     print("左下角在地图的坐标："..myMap.x,myMap.y)
-    local i,j = myMap:where1(myMap.x,myMap.y)
+    local i,j = myMap:where(myMap.x,myMap.y)
     print("左下角对应网格坐标："..i.." : "..j)
     -- print(myMap.mapTable[9][10].pos, myMap.mapTable[9][10].plant)
     -- 测试格子坐标计算
@@ -630,7 +630,7 @@ function touched(touch)
     myMap:touched(touch)
     
     if touch.state == ENDED then
-    c1,c2 = myMap:where1(myMap.x + touch.x, myMap.y + touch.y)
+    c1,c2 = myMap:where(myMap.x + touch.x, myMap.y + touch.y)
     myMap:showGridInfo(c1,c2)
     myMap:removeMapObject(c1,c2)
     print("点击处的坐标绝对值:", (myMap.x + touch.x)/200, (myMap.y + touch.y)/200)
@@ -703,10 +703,10 @@ function Maps:init()
     tree1,tree2,tree3 = "松树", "杨树", "小草"    
     mine1,mine2 = "铁矿", "铜矿"
     
-    imgTree1 = readImage("Planet Cute:Tree Short"),
-    imgTree2 = readImage("Planet Cute:Tree Tall"),
-    imgTree3 = readImage("Platformer Art:Grass"),
-    imgMine1 = readImage("Platformer Art:Mushroom"),
+    imgTree1 = readImage("Planet Cute:Tree Short")
+    imgTree2 = readImage("Planet Cute:Tree Tall")
+    imgTree3 = readImage("Platformer Art:Grass")
+    imgMine1 = readImage("Platformer Art:Mushroom")
     imgMine2 = readImage("Small World:Treasure")
                  
     -- 后续改用表保存物体名称
@@ -742,10 +742,42 @@ function Maps:init()
     -- self:createMapTable()
 end
 
+-- 新建地图数据表, 插入地图上每个格子里的物体数据
+function Maps:createMapTable()
+    --local mapTable = {}
+    for i=1,self.gridCount,1 do
+        self.mapTable[i] = {}
+        for j=1,self.gridCount,1 do
+            self.mapItem = {pos=vec2(i,j), plant=self:randomPlant(), mineral=self:randomMinerial()}
+            table.insert(self.mapTable[i], self.mapItem)
+            -- self.mapTable[i][j] = self.mapItem
+            -- myT:switchPoint(myT.taskID)
+        end
+    end
+    print("OK, 地图初始化完成! ")  
+    self:updateMap()
+end
+
+-- 更新整副地图:绘制地面, 绘制植物, 绘制矿物
+function Maps:updateMap()
+    setContext(self.imgMap)   
+    -- 用 mesh 绘制地面
+    self.m1:draw()
+    -- 用 sprite 绘制植物，矿物，建筑
+    for i = 1,self.gridCount,1 do
+        for j=1,self.gridCount,1 do
+            local pos = self.mapTable[i][j].pos
+            local plant = self.mapTable[i][j].plant
+            local mineral = self.mapTable[i][j].mineral
+            -- 绘制植物和矿物
+            if plant ~= nil then self:drawTree(pos, plant) end
+            if mineral ~= nil then self:drawMineral(pos, mineral) end
+        end
+    end
+    setContext()
+end
+
 function Maps:drawMap() 
-    -- sprite(self.imgMap,-self.scaleX,-self.scaleY)
-    -- sprite(self.imgMap,0,0)
-    
     -- 更新纹理贴图, --如果地图上的物体有了变化
 	self.m.texture = self.imgMap
 	local w,h = self.imgMap.width, self.imgMap.height
@@ -772,56 +804,6 @@ function Maps:touched(touch)
     end
 end
 
--- 新建地图数据表, 插入地图上每个格子里的物体数据
-function Maps:createMapTable1()
-    --local mapTable = {}
-    for i=1,self.gridCount,1 do
-        for j=1,self.gridCount,1 do
-            self.mapItem = {pos=vec2(i,j), plant=self:randomPlant(), mineral=self:randomMinerial()}
-            --self.mapItem = {pos=vec2(i,j), plant=nil, mineral=nil}
-            table.insert(self.mapTable, self.mapItem)
-            -- myT:switchPoint(myT.taskID)
-        end
-    end
-    print("OK, 地图初始化完成! ")
-    self:updateMap1()
-end
-
--- 临时调试用
-function Maps:createMapTable()
-    --local mapTable = {}
-    for i=1,self.gridCount,1 do
-        self.mapTable[i] = {}
-        for j=1,self.gridCount,1 do
-            self.mapItem = {pos=vec2(i,j), plant=self:randomPlant(), mineral=self:randomMinerial()}
-            table.insert(self.mapTable[i], self.mapItem)
-            -- self.mapTable[i][j] = self.mapItem
-            -- myT:switchPoint(myT.taskID)
-        end
-    end
-    print("OK, 地图初始化完成! ")  
-    self:updateMap1()
-end
-
--- 临时调试用
-function Maps:updateMap1()
-    setContext(self.imgMap)   
-    -- 用 mesh 绘制地面
-    self.m1:draw()
-    -- 用 sprite 绘制植物，矿物，建筑
-    for i = 1,self.gridCount,1 do
-        for j=1,self.gridCount,1 do
-            local pos = self.mapTable[i][j].pos
-            local plant = self.mapTable[i][j].plant
-            local mineral = self.mapTable[i][j].mineral
-            -- 绘制植物和矿物
-            if plant ~= nil then self:drawTree(pos, plant) end
-            if mineral ~= nil then self:drawMineral(pos, mineral) end
-        end
-    end
-    setContext()
-end
-
 --局部重绘函数
 function Maps:updateItem(i,j)
 	setContext(self.imgMap)
@@ -831,14 +813,14 @@ function Maps:updateItem(i,j)
 	self.m.texture = self.imgMap
 end
 
--- 临时调试用
-function Maps:where1(x,y)
+-- 根据像素坐标值计算所处网格的 i,j 值
+function Maps:where(x,y)
     local w, h = self.m1.texture.width, self.m1.texture.height
 	local i, j = math.ceil(x/w), math.ceil(y/h)
 	return i, j
 end
 
--- 临时调试用，角色跟地图上物体的交互
+-- 角色跟地图上物体的交互
 function Maps:removeMapObject(i,j)
     local item = self.mapTable[i][j] 
     if item.pos == vec2(i,j) then 
@@ -848,7 +830,7 @@ function Maps:removeMapObject(i,j)
     end
 end
 
--- 临时调试用
+-- 显示网格内的物体信息
 function Maps:showGridInfo(i,j)
     local item = self.mapTable[i][j]
     
@@ -857,37 +839,6 @@ function Maps:showGridInfo(i,j)
         fill(0,255,0,255)
         text(item.pos.."位置处有: ", item.tree, 500,200)
     end
-end
-
--- 根据地图数据表, 刷新地图，比较耗时，可以考虑使用协程，每 1 秒内花 1/60 秒来执行它；
--- 协程还可用来实现时间系统，气候变化，植物生长，它赋予我们操纵游戏世界运行流程的能力(相当于控制时间变化)
--- 或者不用循环，只执行改变的物体，传入网格坐标
-function Maps:updateMap()
-    setContext(self.imgMap)   
-    for i = 1,self.gridCount*self.gridCount,1 do
-        local pos = self.mapTable[i].pos
-        local plant = self.mapTable[i].plant
-        local mineral = self.mapTable[i].mineral
-        -- 绘制地面
-        self:drawGround(pos)
-        -- 绘制植物和矿物
-        if plant ~= nil then self:drawTree(pos, plant) end
-        if mineral ~= nil then self:drawMineral(pos, mineral) end
-    end
-    setContext()
-end
-
-function Maps:touched(touch)
-    if touch.state == BEGAN then
-        myS.x, myS.y = touch.x, touch.y
-    end
-end
-
--- 根据像素坐标值计算所处网格的 i,j 值
-function Maps:where(x,y)
-    local i = math.ceil((x+self.scaleX) / self.scaleX)
-    local j = math.ceil((y+self.scaleY) / self.scaleY)
-    return i,j
 end
 
 -- 随机生成植物，返回值是代表植物名称的字符串
@@ -924,8 +875,6 @@ function Maps:resetMapTable()
     self.mapTable = self:createMapTable()
 end
 
-
--- 临时调试用
 -- 绘制单位格子内的植物
 function Maps:drawTree(position,plant) 
     local w, h = self.m1.texture.width, self.m1.texture.height
@@ -940,7 +889,6 @@ function Maps:drawTree(position,plant)
     popMatrix()
 end
 
--- 临时调试用
 -- 绘制单位格子内的矿物
 function Maps:drawMineral(position,mineral)
     local w, h = self.m1.texture.width, self.m1.texture.height
@@ -954,44 +902,6 @@ function Maps:drawMineral(position,mineral)
     popMatrix()
 end
 
-
--- 原来的绘制函数
--- 绘制单位格子地面
-function Maps:drawGround(position)
-    local x,y = self.scaleX * position.x, self.scaleY * position.y
-    pushMatrix()
-    stroke(99, 94, 94, 255)
-    strokeWidth(1)
-    fill(5,155,40,255)
-    -- fill(5,155,240,255)
-    rect(x,y,self.scaleX,self.scaleY)
-    --sprite("Documents:3D-Wall",x,y,scaleX,scaleY)
-    popMatrix()
-end
-
--- 绘制单位格子内的植物
-function Maps:drawTree1(position,plant)
-    local x,y = self.scaleX * position.x, self.scaleY * position.y
-    pushMatrix()
-    -- 绘制植物图像
-    sprite(self.itemTable[plant],x,y,self.scaleX*6/10,self.scaleY)
-    
-    --fill(100,100,200,255)
-    --text(plant,x,y)
-    popMatrix()
-end
-
--- 绘制单位格子内的矿物
-function Maps:drawMineral1(position,mineral)
-    local x,y = self.scaleX * position.x, self.scaleY * position.y
-    pushMatrix()
-    -- 绘制矿物图像
-    sprite(self.itemTable[mineral], x+self.scaleX/2, y , self.scaleX/2, self.scaleX/2)
-
-    --fill(100,100,200,255)
-    --text(mineral,x+self.scaleX/2,y)
-    popMatrix()
-end
 
 -- Shader
 shaders = {
