@@ -942,6 +942,10 @@ void main()
 }
 ```
 
+###	整合好的代码
+
+跟帧动画整合在一起的代码在这里: [c06.lua](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero/blob/master/src/c06.lua)
+
 ##	在地图上用 shader 增加特效
 
 到目前为止, 我们对地图类的改写基本完成, 调试通过后, 剩下的就是利用 `shader` 来为地图增加一些特效了.
