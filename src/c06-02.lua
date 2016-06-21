@@ -37,7 +37,7 @@ function touched(touch)
     myMap:touched(touch)
     
     if touch.state == ENDED then
-    c1,c2 = myMap:where1(myMap.x + touch.x, myMap.y + touch.y)
+    c1,c2 = myMap:where(myMap.x + touch.x, myMap.y + touch.y)
     myMap:showGridInfo(c1,c2)
     myMap:removeMapObject(c1,c2)
     print("点击处的坐标绝对值:", (myMap.x + touch.x)/200, (myMap.y + touch.y)/200)
