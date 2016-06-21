@@ -2,7 +2,7 @@
 
 ##	概述
 
-本游戏全程使用一款运行于 `iPad` 上的 `APP`--`Codea` 来开发, `Codea` 是一款 `轻量级` + `全功能`的开发工具, 它既是一个:
+本游戏全程使用一款运行于 `iPad` 上的开发工具类 `APP`--`Codea` 来开发, `Codea` 是一款 `轻量级` + `全功能`的开发工具, 它既是一个:
 
 -	 `运行时库-Runtime`
 
@@ -19,10 +19,6 @@
 -	`调试服务器-debugSever`, 可通过浏览器来云端调试代码.
 
 它还是 `Lua` 语言的一种扩展, 本质上它就是一个运行于 `iPad` 上可以动态加载运行 `Lua` 代码的应用程序. 
-
-这就是它的样子:
-
-一些截图
 
 它实现了一个非常易于使用的编程框架(类似于 `Processing` 和 `OpenFrameWorks`):
 
@@ -61,9 +57,61 @@
 
 ##	界面
 
-##	操作	
+###	启动进入
+
+启动 `Codea` 后进入主界面, 如下:
+
+![输入图片说明](https://static.oschina.net/uploads/img/201606/21192024_X6JC.jpg "在这里输入图片标题")
+
+###	示例
+
+`Codea` 自带了一些示例程序, 如下:
+
+![输入图片说明](https://static.oschina.net/uploads/img/201606/21192044_TciL.jpg "在这里输入图片标题")
+
+###	左侧菜单栏
+
+点开左侧菜单栏, 出现 `4` 个选项
+
+![输入图片说明](https://static.oschina.net/uploads/img/201606/21192107_8xBU.jpg "在这里输入图片标题")
+
+###	内置函数手册
+
+在 `Codea` 中内置了全部的函数说明, 非常方便在编程时随手查阅
+
+![输入图片说明](https://static.oschina.net/uploads/img/201606/21192127_siL5.png "在这里输入图片标题")
+
+###	shader实验室
+
+左侧菜单栏的第二项是一个 `shader` 实验室, 你可以在里面调试自己的 `shader` 代码
+
+![输入图片说明](https://static.oschina.net/uploads/img/201606/21192143_RbLL.png "在这里输入图片标题")
+
+###	自带素材库
+
+左侧菜单栏第三项是 `Codea` 自带的素材库, 有一些可以免费使用的图片素材和音乐音效素材, 还有一些 `shader`模板, 用户也可以自行添加素材到素材库
+
+![输入图片说明](https://static.oschina.net/uploads/img/201606/21192203_UY9e.png "在这里输入图片标题")
+
+###	编辑界面
+
+编辑界面自带联想输入, 非常方便直接在 `Codea` 上输入代码
+
+![输入图片说明](https://static.oschina.net/uploads/img/201606/21192221_RQza.png "在这里输入图片标题")
+
+![输入图片说明](https://static.oschina.net/uploads/img/201606/21192248_7EOX.png "在这里输入图片标题")
+
+##	程序框架说明
+
+--后续补充
+
+##	主要函数说明
+
+--后续补充	
 
 ##	其他在 iPad 上运行的开发工具
+
+除了 `Codea`, 还有很多可以运行在 `iPad` 上的编程工具, 比如 `Processing`, `TechBASIC` 等等, 它们各有所长.
 
 苹果在最近的 `WWDC` 上宣布 `iOS 10` 会提供一款名为 `Swift Playground` 的免费开发工具, 看来随着平板电脑性能的提升, 用平板编写代码已经是趋势所向.
 

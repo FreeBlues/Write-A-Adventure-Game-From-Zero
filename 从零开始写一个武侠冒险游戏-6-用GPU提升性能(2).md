@@ -946,6 +946,14 @@ void main()
 
 跟帧动画整合在一起的代码在这里: [c06.lua](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero/blob/master/src/c06.lua)
 
+现在我们可以方便地更换地面纹理贴图, 看看这两个不同的贴图效果:
+
+![截图1](https://static.oschina.net/uploads/img/201606/21185137_9SQf.jpg "在这里输入图片标题")]
+
+![截图2](https://static.oschina.net/uploads/img/201606/21185122_7RmZ.jpg "在这里输入图片标题")
+
+
+
 ##	在地图上用 shader 增加特效
 
 到目前为止, 我们对地图类的改写基本完成, 调试通过后, 剩下的就是利用 `shader` 来为地图增加一些特效了.
