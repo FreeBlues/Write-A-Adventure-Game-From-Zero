@@ -63,8 +63,11 @@ function Status:raderGraphMesh()
                                 vec2(0,-r/s),vec2(x/s,-y/s),vec2(x/s,y/s)})
     print(#points, points[1], points[2],points[3])
     self.m.vertices = points
-    local c1 = color(0, 255, 121, 123)
-    self.m:setColors(c1)    
+    local c1,c2 = color(0, 255, 121, 123),color(255, 57, 0, 123)
+    self.m:setColors(c2)
+    self.m:color(1,c1)
+    self.m:color(5,c1)
+    self.m:color(9,c1)
     
     -- 实时绘制顶点位置，根据各状态属性值，实时计算顶点位置
     local function axisDynamic()
@@ -79,7 +82,7 @@ function Status:raderGraphMesh()
     self.m1 = mesh()
     self.m1.vertices = axisDynamic()
     local c = color(0, 255, 121, 123)
-    self.m1:setColors(c2)
+    self.m1:setColors(c)
 end
 
 -- 角色技能雷达图
