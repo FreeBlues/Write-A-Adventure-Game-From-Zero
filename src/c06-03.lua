@@ -65,6 +65,21 @@ function Status:raderGraphMesh()
     self.m.vertices = points
     local c1 = color(0, 255, 121, 123)
     self.m:setColors(c1)    
+    
+    -- 实时绘制顶点位置，根据各状态属性值，实时计算顶点位置
+    local function axisDynamic()
+        local t,n,j,z,q,x = self.tili, self.neili, self.jingli,self.zhili, self.qi, self.xue
+        local c,s = math.cos(math.rad(30)), math.sin(math.rad(30))
+        local points = triangulate({vec2(0,t),vec2(-n*c,n*s),vec2(-j*c,-j*s),
+                                    vec2(0,-z),vec2(q*c,-q*s),vec2(x*c,x*s)})
+        return points
+    end
+    
+    -- 绘制代表属性值的小六边形
+    self.m1 = mesh()
+    self.m1.vertices = axisDynamic()
+    local c = color(0, 255, 121, 123)
+    self.m1:setColors(c2)
 end
 
 -- 角色技能雷达图
@@ -176,6 +191,7 @@ function draw()
     
     translate(650,300)
     myStatus.m:draw()
+    myStatus.m1:draw()
     
     sysInfo()
 end

@@ -87,6 +87,8 @@ end
 看起来不错, 再在这个大六边形上面画一个小六边形, 小六边形的顶点需要根据属性值(`体力`,`内力`,`精力`,`智力`,`气`,`血`)来计算, 还好我们前面写过一个计算函数 `linesDynamic(t,n,j,z,q,x)`, 把它改个名字, 再稍作改动, 让它返回计算出来的顶点, 然后再新建一个名为 `m1` 的 `mesh`, 用来绘制代表属性值的小六边形, 代码如下:
 
 ```
+-- 用 mesh 绘制雷达图
+function Status:raderGraphMesh()
 	...
 	-- 实时绘制顶点位置，根据各状态属性值，实时计算顶点位置
     local function axisDynamic()
@@ -96,7 +98,20 @@ end
                                     vec2(0,-z),vec2(q*c,-q*s),vec2(x*c,x*s)})
         return points
     end
+    
+    -- 绘制代表属性值的小六边形
+    self.m1 = mesh()
+    self.m1.vertices = axisDynamic()
+    local c = color(0, 255, 121, 123)
+    self.m1:setColors(c2)
+    ...
+end
 ```
+在主程序的 `draw()` 中增加一句 `myStatus.m1:draw()` 就可以了, 看看运行截图:
+
+![增加了属性值小六边形]()
+
+很好, 非常符合我们的要求, 不过有一点就是对角的线没有画出来, 现在需要处理一下, 这里要好好
 
 
 
