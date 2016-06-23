@@ -83,7 +83,7 @@ end
 
 截图如下:
 
-![雷达图背景大六边形]()
+![雷达图背景大六边形](https://static.oschina.net/uploads/img/201606/23205641_CJxT.png "雷达图背景大六边形")
 
 看起来不错, 再在这个大六边形上面画一个小六边形, 小六边形的顶点需要根据属性值(`体力`,`内力`,`精力`,`智力`,`气`,`血`)来计算, 还好我们前面写过一个计算函数 `linesDynamic(t,n,j,z,q,x)`, 把它改个名字, 再稍作改动, 让它返回计算出来的顶点, 然后再新建一个名为 `m1` 的 `mesh`, 用来绘制代表属性值的小六边形, 代码如下:
 
@@ -110,7 +110,7 @@ end
 ```
 在主程序的 `draw()` 中增加一句 `myStatus.m1:draw()` 就可以了, 看看运行截图:
 
-![增加了属性值小六边形]()
+![增加了属性值小六边形](https://static.oschina.net/uploads/img/201606/23205725_gguL.png "增加了属性值小六边形")
 
 很好, 非常符合我们的要求, 不过有一点就是作为背景的大六边形的对角的线没有画出来, 现在需要处理一下, 实际上用 `shader` 最适合画的图形就是三角形, 直线有点麻烦(虽然 `OpenGL ES 2.0` 支持 `三角形`, `直线` 和 `点` 三种基本图形绘制, 不过我在 `Codea` 中没找到`直线`的函数), 当然, 我们也可以用两个狭长的三角形拼成一个细长的矩形来模拟直线, 不过这样比较麻烦, 所以我们打算改用另外一种方法来实现: 把组成六边形的三角形的顶点设置不同的颜色, 这样相邻两个三角形之间那条公共边就被突出了.
 
@@ -128,7 +128,7 @@ end
 
 看看截图:
 
-![第一次修改顶点颜色]()
+![第一次修改顶点颜色](https://static.oschina.net/uploads/img/201606/23205847_cfNb.png "第一次修改顶点颜色")
 
 果然, 完全不是我们想象中的六个小三角形, 原来出于优化的原因, 函数 `triangulate()` 会生成尽量少的三角形, 我们的六边形只需要 `4` 个三角形就可以了, 所以它返回 `12` 个顶点, 看来想达到我们的效果, 还得手动设定顶点, 好在我们的图形比较规则, 只需要再加一个中心的坐标就够了, 而我们中心点的坐标很有先见之明地被设置为了 `vec2(0,0)`, 代码如下:
 
@@ -155,7 +155,7 @@ end
     ...
 ```
 
-![六个三角形颜色区分的截图]()
+![六个三角形颜色区分的截图](https://static.oschina.net/uploads/img/201606/23205940_rIG4.png "六个三角形颜色区分的截图")
 
 再看看效果, 还可以, 好, 就按这个方式写了.
 
@@ -446,7 +446,7 @@ end
 
 
 -- Shader
-shadersMap = {
+shadersStatus = {
 status = { vs=[[
 // 雷达图着色器: 用 shader 绘制雷达图
 //--------vertex shader---------
@@ -489,8 +489,63 @@ void main()
 
 发现改写为 `mesh`, 再把原来的一个函数拆分成三个后, 不仅性能提升了, 而且代码也没那么多了, 更重要的是读起来很清晰.
 
-现在, 我们已经用 `mesh` 改写了帧动画, 地图类, 状态类, 而且效果还不错, 帧速也提升到了 `60` 左右, 既然达到了起初的目标, 那么剩下的就是再次把这几个改写后的模块整合到一起, 整合后的代码在这里: [c06.lua](https://raw.githubusercontent.com/FreeBlues/Write-A-Adventure-Game-From-Zero/master/src/c06.lua).
+
+## 本章小结
+
+现在, 我们已经用 `mesh` 完成 `帧动画`, `地图类` 和 `状态类` 的改写, 而且效果还不错, 帧速也提升到了 `60` 左右, 既然达到了起初的目标, 那么剩下的就是再次把这几个改写后的模块整合到一起, 整合后的代码在这里: [c06.lua](https://raw.githubusercontent.com/FreeBlues/Write-A-Adventure-Game-From-Zero/master/src/c06.lua).
 
 
+## 所有章节链接
+
+###	Github项目地址
+
+[Github项目地址](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero), 源代码放在 `src/` 目录下, 图片素材放在 `assets/` 目录下, 整个项目文件结构如下:
+
+```
+Air:Write-A-Adventure-Game-From-Zero admin$ tree
+.
+├── README.md
+├── Vim 列编辑功能详细讲解.md
+├── assets
+│   ├── IMG_0097.PNG
+│   ├── IMG_0099.JPG
+│   ├── IMG_0100.PNG
+│   ├── c04.mp4
+│   ├── cat.JPG
+│   └── runner.png
+├── src
+│   ├── c01.lua
+│   ├── c02.lua
+│   ├── c03.lua
+│   ├── c04.lua
+│   ├── c05.lua
+│   ├── c06-01.lua
+│   ├── c06-02.lua
+│   ├── c06-03.lua
+│   └── c06.lua
+├── 从零开始写一个武侠冒险游戏-0-开发框架Codea简介.md
+├── 从零开始写一个武侠冒险游戏-1-状态原型.md
+├── 从零开始写一个武侠冒险游戏-2-帧动画.md
+├── 从零开始写一个武侠冒险游戏-3-地图生成.md
+├── 从零开始写一个武侠冒险游戏-4-第一次整合.md
+├── 从零开始写一个武侠冒险游戏-5-使用协程.md
+├── 从零开始写一个武侠冒险游戏-6-用GPU提升性能(1).md
+├── 从零开始写一个武侠冒险游戏-6-用GPU提升性能(2).md
+└── 从零开始写一个武侠冒险游戏-6-用GPU提升性能(3).md
+
+2 directories, 26 files
+Air:Write-A-Adventure-Game-From-Zero admin$ 
+```
+
+### 开源中国项目文档链接
+
+[从零开始写一个武侠冒险游戏-1-状态原型](http://my.oschina.net/freeblues/blog/687421)   
+[从零开始写一个武侠冒险游戏-2-帧动画](http://my.oschina.net/freeblues/blog/689399)  
+[从零开始写一个武侠冒险游戏-3-地图生成](http://my.oschina.net/freeblues/blog/690618)  
+[从零开始写一个武侠冒险游戏-4-第一次整合](http://my.oschina.net/freeblues/blog/690718)  
+[从零开始写一个武侠冒险游戏-5-使用协程](http://my.oschina.net/freeblues/blog/691552)  
+[从零开始写一个武侠冒险游戏-6-用GPU提升性能(1)](http://my.oschina.net/freeblues/blog/694246)  
+[从零开始写一个武侠冒险游戏-6-用GPU提升性能(2)](http://my.oschina.net/freeblues/blog/698529)
+[从零开始写一个武侠冒险游戏-6-用GPU提升性能(3)](http://my.oschina.net/freeblues/blog/700143)
 
 
