@@ -1,4 +1,5 @@
 #	从零开始写一个武侠冒险游戏-6-用GPU提升性能(3)
+##	--解决因绘制雷达图导致的帧速下降问题
 
 ##	概述
 
@@ -113,7 +114,7 @@ end
 
 很好, 非常符合我们的要求, 不过有一点就是作为背景的大六边形的对角的线没有画出来, 现在需要处理一下, 实际上用 `shader` 最适合画的图形就是三角形, 直线有点麻烦(虽然 `OpenGL ES 2.0` 支持 `三角形`, `直线` 和 `点` 三种基本图形绘制, 不过我在 `Codea` 中没找到`直线`的函数), 当然, 我们也可以用两个狭长的三角形拼成一个细长的矩形来模拟直线, 不过这样比较麻烦, 所以我们打算改用另外一种方法来实现: 把组成六边形的三角形的顶点设置不同的颜色, 这样相邻两个三角形之间那条公共边就被突出了.
 
-在 `mesh` 中, 可以用这个函数来设定顶点的颜色 `mesh:color(i, color)`, 第一个参数 `i` 是顶点在顶点数组中的索引值, 从 `1` 开始, 貌似我们的六边形总共生成了 `12` 个顶点(好像有些不对), 每 `3` 个顶点组成一个三角形, 先随便改改看看是什么效果, 就修改其中 `1`,`5`,`9` 号顶点好了, 马上试验:
+在 `mesh` 中, 可以用这个函数来设定顶点的颜色 `mesh:color(i, color)`, 第一个参数 `i` 是顶点在顶点数组中的索引值, 从 `1` 开始, 貌似我们的六边形总共生成了 `12` 个顶点(感觉好像有些不对), 每 `3` 个顶点组成一个三角形, 先随便改改看看是什么效果, 就修改其中 `1`,`5`,`9` 号顶点好了, 马上试验:
 
 ```
 	...
@@ -125,6 +126,368 @@ end
 	...
 ```
 
+看看截图:
+
+![第一次修改顶点颜色]()
+
+果然, 完全不是我们想象中的六个小三角形, 原来出于优化的原因, 函数 `triangulate()` 会生成尽量少的三角形, 我们的六边形只需要 `4` 个三角形就可以了, 所以它返回 `12` 个顶点, 看来想达到我们的效果, 还得手动设定顶点, 好在我们的图形比较规则, 只需要再加一个中心的坐标就够了, 而我们中心点的坐标很有先见之明地被设置为了 `vec2(0,0)`, 代码如下:
+
+```
+	...
+	-- 手动定义组成六边形的6个三角形的顶点
+    local points = {vec2(0,r/s), vec2(-x/s,y/s), vec2(0,0),
+                    vec2(-x/s,y/s), vec2(-x/s,-y/s), vec2(0,0),
+                    vec2(-x/s,-y/s), vec2(0,-r/s), vec2(0,0),
+                    vec2(0,-r/s), vec2(x/s,-y/s), vec2(0,0),
+                    vec2(x/s,-y/s), vec2(x/s,y/s), vec2(0,0),
+                    vec2(x/s,y/s), vec2(0,r/s), vec2(0,0)} 
+    self.m.vertices = points
+    
+    local c1,c2 = color(186, 255, 0, 123),color(25, 235, 178, 123)
+    self.m:setColors(c2)
+    self.m:color(1,c1)
+    self.m:color(4,c1)
+    self.m:color(7,c1)
+    self.m:color(10,c1)
+    self.m:color(13,c1)
+    self.m:color(16,c1)
+    
+    ...
+```
+
+![六个三角形颜色区分的截图]()
+
+再看看效果, 还可以, 好, 就按这个方式写了.
+
+现在需要处理的是这个用于实时计算属性值顶点的函数 `axisDynamic()`, 认真分析一下, 就会发现, 其实我们不需要实时计算, 因为属性值并不是实时更新的, 它应该是随着角色的活动而变化, 角色有活动它才会变, 当然这也取决于我们的设定, 如果我们设定说角色只要有动作就会耗费体力, 哪怕角色坐着不动, 只要时间流逝它也会变的话, 那么它就需要实时绘制了, 我们先按实时绘制来实现. 既然是实时计算, 那我们希望把这部分计算处理也放到 `GPU` 中处理, 也就是说需要在 `shader` 中实现这个函数.
+
+另外就是目前只用一个函数 `radarGraphMesh()` 来实现雷达图的绘制, 有些结构不合理, 一些初始化的工作在每次绘制时都要做, 所以打算把它拆分成三个个函数, 函数 `radarGraphInit()` 用来负责初始化一些顶点数据, 函数 `radarGraphVertex()` 用来根据属性值实时计算顶点坐标, 函数 `radarGraphDraw()` 用来执行绘图操作, 如下:
+
+```
+function Status:radarGraphInit()
+	-- 雷达图底部六边形背景
+    self.m = mesh()
+    p = {"体力","内力","精力","智力","气","血"}
+    -- 中心坐标，半径，角度
+    local x0,y0,r,a,s = 150,230,50,360/6,1
+    -- 计算右上方斜线的坐标
+    local x,y = r* math.cos(math.rad(30)), r* math.sin(math.rad(30))
+    -- 六边形 6 个顶点坐标，从正上方开始，逆时针方向
+    local points = triangulate({vec2(0,r/s),vec2(-x/s,y/s),vec2(-x/s,-y/s),
+                                vec2(0,-r/s),vec2(x/s,-y/s),vec2(x/s,y/s)})
+    print(#points, points[1], points[2],points[3])
+    -- 手动定义组成六边形的6个三角形的顶点
+    local points = {vec2(0,r/s), vec2(-x/s,y/s), vec2(0,0),
+                    vec2(-x/s,y/s), vec2(-x/s,-y/s), vec2(0,0),
+                    vec2(-x/s,-y/s), vec2(0,-r/s), vec2(0,0),
+                    vec2(0,-r/s), vec2(x/s,-y/s), vec2(0,0),
+                    vec2(x/s,-y/s), vec2(x/s,y/s), vec2(0,0),
+                    vec2(x/s,y/s), vec2(0,r/s), vec2(0,0)} 
+    self.m.vertices = points
+    
+    local c1,c2 = color(186, 255, 0, 123),color(25, 235, 178, 123)
+    self.m:setColors(c2)
+    self.m:color(1,c1)
+    self.m:color(4,c1)
+    self.m:color(7,c1)
+    self.m:color(10,c1)
+    self.m:color(13,c1)
+    self.m:color(16,c1)
+    
+    
+    -- 绘制代表属性值的小六边形
+    self.m1 = mesh()
+    self.m1.vertices = self:radarGraphVertex()
+    local c = color(221, 105, 55, 123)
+    self.m1:setColors(c)
+    
+end
+
+-- 实时绘制顶点位置，根据各状态属性值，实时计算顶点位置
+function Status:radarGraphVertex()
+	local l = 4
+	local t,n,j,z,q,x = self.tili/l, self.neili/l, self.jingli/l,self.zhili/l, self.qi/l, self.xue/l
+	local c,s = math.cos(math.rad(30)), math.sin(math.rad(30))
+	local points = triangulate({vec2(0,t),vec2(-n*c,n*s),vec2(-j*c,-j*s),
+                                    vec2(0,-z),vec2(q*c,-q*s),vec2(x*c,x*s)})
+	return points
+end
+
+function Status:radarGraphDraw()
+	setContext(self.img)
+    pushMatrix()
+    pushStyle()
+	-- 平移到中心 (x0,y0), 方便以此为中心旋转
+    translate(x0,y0)
+    -- 围绕中心点匀速旋转
+    rotate(30+ElapsedTime*10)
+    
+    self.m:draw()
+	self.m1:draw()
+
+    
+    strokeWidth(2)    
+    -- noSmooth()
+    stroke(21, 42, 227, 255)
+    fill(79, 229, 28, 255)
+    -- 绘制雷达图相对顶点之间的连线
+    for i=1,6 do
+        -- print(i)
+        text(p[i],0,45)
+        -- line(0,0,0,r)
+        rotate(a)
+    end
+
+    popStyle()
+    popMatrix()
+    setContext()	
+end
+```
+
+再把 `Status:radarGraphInit()` 放到 `Status:init()` 中, 把 `Status:radarGraphDraw()` 放到 `Status:drawUI()` 中, 如下:
+
+```
+function Status:init() 
+    ...
+        
+    -- 初始化雷达图
+    self:radarGraphInit()
+end
+
+function Status:drawUI()
+    ...
+    
+    self:radarGraphDraw()
+    sprite(self.img, 400,300)
+end
+```
+
+运行发现帧速大幅提升, 基本在 `60` 左右, 看来之前拖累性能的原因是不合理的程序结构(把所有工作都放到一个函数 `Status:radarGraph()` 中去绘制雷达图), 真是歪打正着, 这么看来, 这里仅仅做完这两点:
+
+-	把绘图方式改写为 `mesh`;
+-	修改不合理的程序结构.
+
+就已经把性能大幅度提升了, 也就没必要再用 `shader` 来改写了.
+
+剩下的就是一些收尾工作, 比如把一些调试时使用的全局变量改写为类属性什么的, 完成后的完整状态类如下:
+
+```
+-- 用 mesh 绘制，先绘制背景六边形，再绘制技能六边形，再绘制动态技能，最后再考虑旋转
+-- 角色状态类
+Status = class()
+
+function Status:init() 
+    -- 体力，内力，精力，智力，气，血
+    self.tili = 100
+    self.neili = 30
+    self.jingli = 70
+    self.zhili = 100
+    self.qi = 100
+    self.xue = 100
+    self.gongfa = {t={},n={},j={},z={}}
+    self.img = image(200, 300)
+    -- 初始化雷达图
+    self:radarGraphInit()
+end
+
+function Status:update()
+    -- 更新状态：自我修炼，日常休息，战斗
+    self.neili = self.neili + 1
+    self:xiulian()
+end
+
+function Status:drawUI()
+    setContext(self.img)
+    background(119, 121, 72, 255)
+    pushStyle()
+    fill(35, 112, 111, 114)
+    rect(5,5,200-10,300-10)
+    fill(70, 255, 0, 255)
+    textAlign(RIGHT)
+    local w,h = textSize("体力: ")
+    text("体力: ",30,280) 
+    text(math.floor(self.tili), 30 + w, 280)
+    text("内力: ",30,260) 
+    text(math.floor(self.neili),  30 + w, 260)
+    text("精力: ",30,240) 
+    text(math.floor(self.jingli), 30 + w, 240)
+    text("智力: ",30,220) 
+    text(math.floor(self.zhili), 30 + w, 220)
+    text("气    : ",30,200) 
+    text(math.floor(self.qi), 30 + w, 200)
+    text("血    : ",30,180) 
+    text(math.floor(self.xue), 30 + w, 180)
+    -- 绘制状态栏绘制的角色
+    sprite("Documents:B1", 100,90)
+    popStyle()
+    setContext()
+    
+    self:radarGraphDraw()
+    sprite(self.img, 400,300)
+end
+
+function Status:xiulian()
+    -- 修炼基本内功先判断是否满足修炼条件: 体力，精力大于50，修炼一次要消耗一些
+    if self.tili >= 50 and self.jingli >= 50 then
+        self.neili = self.neili * (1+.005)
+        self.tili = self.tili * (1-.001)
+        self.jingli = self.jingli * (1-.001)
+    end
+end
+
+-- 用 mesh 绘制, 改写为3个函数
+function Status:radarGraphInit()
+	-- 雷达图底部六边形背景
+    self.m = mesh()
+    p = {"体力","内力","精力","智力","气","血"}
+    -- 中心坐标，半径，角度
+    self.x0, self.y0, self.rr, self.ra, self.rs = 150,230,40,360/6,1
+    local x0,y0,r,a,s = self.x0, self.y0, self.rr, self.ra, self.rs
+    -- 计算右上方斜线的坐标
+    local x,y = r* math.cos(math.rad(30)), r* math.sin(math.rad(30))
+    -- 六边形 6 个顶点坐标，从正上方开始，逆时针方向
+    local points = triangulate({vec2(0,r/s),vec2(-x/s,y/s),vec2(-x/s,-y/s),
+                                vec2(0,-r/s),vec2(x/s,-y/s),vec2(x/s,y/s)})
+    print(#points, points[1], points[2],points[3])
+    -- 手动定义组成六边形的6个三角形的顶点
+    local points = {vec2(0,r/s), vec2(-x/s,y/s), vec2(0,0),
+                    vec2(-x/s,y/s), vec2(-x/s,-y/s), vec2(0,0),
+                    vec2(-x/s,-y/s), vec2(0,-r/s), vec2(0,0),
+                    vec2(0,-r/s), vec2(x/s,-y/s), vec2(0,0),
+                    vec2(x/s,-y/s), vec2(x/s,y/s), vec2(0,0),
+                    vec2(x/s,y/s), vec2(0,r/s), vec2(0,0)} 
+    self.m.vertices = points
+    
+    local c1,c2 = color(186, 255, 0, 123),color(25, 235, 178, 123)
+    self.m:setColors(c2)
+    self.m:color(1,c1)
+    self.m:color(4,c1)
+    self.m:color(7,c1)
+    self.m:color(10,c1)
+    self.m:color(13,c1)
+    self.m:color(16,c1)
+    
+    
+    -- 绘制代表属性值的小六边形
+    self.m1 = mesh()
+    self.m1.vertices = self:radarGraphVertex()
+    local c = color(221, 105, 55, 123)
+    self.m1:setColors(c)
+    
+end
+
+-- 实时绘制顶点位置，根据各状态属性值，实时计算顶点位置
+function Status:radarGraphVertex()
+	local l = 4
+	-- 中心坐标，半径，角度
+	local x0,y0,r,a,s = self.x0, self.y0, self.rr, self.ra, self.rs
+	local t,n,j,z,q,x = self.tili/l, self.neili/l, self.jingli/l,self.zhili/l, self.qi/l, self.xue/l
+	local c,s = math.cos(math.rad(30)), math.sin(math.rad(30))
+	local points = triangulate({vec2(0,t),vec2(-n*c,n*s),vec2(-j*c,-j*s),
+                                    vec2(0,-z),vec2(q*c,-q*s),vec2(x*c,x*s)})
+	return points
+end
+
+function Status:radarGraphDraw()
+	setContext(self.img)
+    pushMatrix()
+    pushStyle()
+    
+    -- 中心坐标，半径，角度
+    local x0,y0,r,a,s = self.x0, self.y0, self.rr, self.ra, self.rs
+	-- 平移到中心 (x0,y0), 方便以此为中心旋转
+    translate(x0,y0)
+    -- 围绕中心点匀速旋转
+    rotate(30+ElapsedTime*10)
+    
+    self.m:draw()
+
+    strokeWidth(2)    
+    -- Smooth()
+    stroke(21, 42, 227, 255)
+    fill(79, 229, 128, 255)
+    -- 绘制雷达图相对顶点之间的连线
+    for i=1,6 do
+        text(p[i],0,r+15)
+        -- line(0,0,0,49)
+        rotate(a)
+    end
+    self.m1.vertices = self:radarGraphVertex()
+    self.m1:draw()
+
+    popStyle()
+    popMatrix()
+    setContext()	
+end
 
 
+-- main 主程序框架
+function setup()
+    displayMode(OVERLAY)
+    myStatus = Status()
+    myStatus:raderGraphMesh()
+end
 
+function draw()
+    background(32, 29, 29, 255)
+    
+    myStatus:drawUI()
+    
+    sysInfo()
+end
+
+-- 系统信息: 显示FPS和内存使用情况
+function sysInfo()
+    pushStyle()
+    fill(255, 255, 255, 255)
+    -- 根据 DeltaTime 计算 fps, 根据 collectgarbage("count") 计算内存占用
+    local fps = math.floor(1/DeltaTime)
+    local mem = math.floor(collectgarbage("count"))
+    text("FPS: "..fps.."    Mem："..mem.." KB",650,740)
+    popStyle()
+end
+
+
+-- Shader
+shadersMap = {
+status = { vs=[[
+// 雷达图着色器: 用 shader 绘制雷达图
+//--------vertex shader---------
+attribute vec4 position;
+attribute vec4 color;
+attribute vec2 texCoord;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+uniform mat4 modelViewProjection;
+
+void main()
+{
+	vColor = color;
+	vTexCoord = texCoord;
+	gl_Position = modelViewProjection * position;
+}
+]],
+fs=[[
+//---------Fragment shader------------
+//Default precision qualifier
+precision highp float;
+
+varying vec2 vTexCoord;
+varying vec4 vColor;
+
+// 纹理贴图
+uniform sampler2D texture;
+
+void main()
+{
+	// vec4 col = texture2D(texture,vec2(mod(vTexCoord.x,1.0), mod(vTexCoord.y,1.0)));
+	vec4 col = texture2D(texture,vTexCoord);
+	gl_FragColor = vColor * col;
+}
+]]}
+}
+```
+
+发现改写为 `mesh`, 再把原来的一个函数拆分成三个后, 不仅性能提升了, 而且代码也没那么多了, 更重要的是读起来很清晰.
