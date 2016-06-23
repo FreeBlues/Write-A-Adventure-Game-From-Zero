@@ -66,7 +66,7 @@ function Status:radarGraphInit()
 	-- 雷达图底部六边形背景
     self.m = mesh()
     p = {"体力","内力","精力","智力","气","血"}
-    -- 中心坐标，半径，角度
+    -- 中心坐标，半径，角度，缩放比例
     self.x0, self.y0, self.rr, self.ra, self.rs = 150,230,40,360/6,1
     local x0,y0,r,a,s = self.x0, self.y0, self.rr, self.ra, self.rs
     -- 计算右上方斜线的坐标
@@ -105,7 +105,7 @@ end
 -- 实时绘制顶点位置，根据各状态属性值，实时计算顶点位置
 function Status:radarGraphVertex()
 	local l = 4
-	-- 中心坐标，半径，角度
+	-- 中心坐标，半径，角度，缩放比例
 	local x0,y0,r,a,s = self.x0, self.y0, self.rr, self.ra, self.rs
 	local t,n,j,z,q,x = self.tili/l, self.neili/l, self.jingli/l,self.zhili/l, self.qi/l, self.xue/l
 	local c,s = math.cos(math.rad(30)), math.sin(math.rad(30))
@@ -119,7 +119,7 @@ function Status:radarGraphDraw()
     pushMatrix()
     pushStyle()
     
-    -- 中心坐标，半径，角度
+    -- 中心坐标，半径，角度，缩放比例
     local x0,y0,r,a,s = self.x0, self.y0, self.rr, self.ra, self.rs
 	-- 平移到中心 (x0,y0), 方便以此为中心旋转
     translate(x0,y0)

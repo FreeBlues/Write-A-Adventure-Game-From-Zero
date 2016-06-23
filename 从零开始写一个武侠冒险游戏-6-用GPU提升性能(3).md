@@ -168,7 +168,7 @@ function Status:radarGraphInit()
 	-- 雷达图底部六边形背景
     self.m = mesh()
     p = {"体力","内力","精力","智力","气","血"}
-    -- 中心坐标，半径，角度
+    -- 中心坐标，半径，角度，缩放比例
     local x0,y0,r,a,s = 150,230,50,360/6,1
     -- 计算右上方斜线的坐标
     local x,y = r* math.cos(math.rad(30)), r* math.sin(math.rad(30))
@@ -340,7 +340,7 @@ function Status:radarGraphInit()
 	-- 雷达图底部六边形背景
     self.m = mesh()
     p = {"体力","内力","精力","智力","气","血"}
-    -- 中心坐标，半径，角度
+    -- 中心坐标，半径，角度，缩放比例
     self.x0, self.y0, self.rr, self.ra, self.rs = 150,230,40,360/6,1
     local x0,y0,r,a,s = self.x0, self.y0, self.rr, self.ra, self.rs
     -- 计算右上方斜线的坐标
@@ -379,7 +379,7 @@ end
 -- 实时绘制顶点位置，根据各状态属性值，实时计算顶点位置
 function Status:radarGraphVertex()
 	local l = 4
-	-- 中心坐标，半径，角度
+	-- 中心坐标，半径，角度，缩放比例
 	local x0,y0,r,a,s = self.x0, self.y0, self.rr, self.ra, self.rs
 	local t,n,j,z,q,x = self.tili/l, self.neili/l, self.jingli/l,self.zhili/l, self.qi/l, self.xue/l
 	local c,s = math.cos(math.rad(30)), math.sin(math.rad(30))
@@ -425,14 +425,11 @@ end
 function setup()
     displayMode(OVERLAY)
     myStatus = Status()
-    myStatus:raderGraphMesh()
 end
 
 function draw()
-    background(32, 29, 29, 255)
-    
+    background(32, 29, 29, 255)    
     myStatus:drawUI()
-    
     sysInfo()
 end
 
@@ -491,3 +488,9 @@ void main()
 ```
 
 发现改写为 `mesh`, 再把原来的一个函数拆分成三个后, 不仅性能提升了, 而且代码也没那么多了, 更重要的是读起来很清晰.
+
+现在, 我们已经用 `mesh` 改写了帧动画, 地图类, 状态类, 而且效果还不错, 帧速也提升到了 `60` 左右, 既然达到了起初的目标, 那么剩下的就是再次把这几个改写后的模块整合到一起, 整合后的代码在这里: [c06.lua](https://raw.githubusercontent.com/FreeBlues/Write-A-Adventure-Game-From-Zero/master/src/c06.lua).
+
+
+
+
