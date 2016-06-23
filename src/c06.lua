@@ -740,7 +740,7 @@ function Status:radarGraphDraw()
 end
 
 -- Shader
-shadersMap = {
+shadersStatus = {
 status = { vs=[[
 // 雷达图着色器: 用 shader 绘制雷达图
 //--------vertex shader---------
