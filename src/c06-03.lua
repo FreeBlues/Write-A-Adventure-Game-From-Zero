@@ -151,7 +151,6 @@ end
 function setup()
     displayMode(OVERLAY)
     myStatus = Status()
-    myStatus:raderGraphMesh()
 end
 
 function draw()
