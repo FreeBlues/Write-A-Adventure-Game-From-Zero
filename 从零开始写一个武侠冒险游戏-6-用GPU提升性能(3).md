@@ -1,6 +1,11 @@
 #	从零开始写一个武侠冒险游戏-6-用GPU提升性能(3)
 ##	--解决因绘制雷达图导致的帧速下降问题
 
+-	作者:FreeBlues
+-	修订记录
+	-	2016.06.23 初稿完成.
+	- 	2016.08.03 增加对 `XCode` 项目文件的说明.
+
 ##	概述
 
 现在轮到用 `mesh` 改写那个给性能带来巨大影响的状态类了, 分析一下不难发现主要是那个实时绘制并且不停旋转的雷达图拖累了帧速, 那么我们就先从雷达图入手.
@@ -499,19 +504,27 @@ void main()
 
 ###	Github项目地址
 
-[Github项目地址](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero), 源代码放在 `src/` 目录下, 图片素材放在 `assets/` 目录下, 整个项目文件结构如下:
+[Github项目地址](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero), 源代码放在 `src/` 目录下, 图片素材放在 `assets/` 目录下, `XCode`项目文件放在 `MyAdventureGame` 目录下,  整个项目文件结构如下:
 
 ```
 Air:Write-A-Adventure-Game-From-Zero admin$ tree
 .
+├── MyAdventureGame
+│   ├── Assets
+│   │   ├── ...
+│   ├── Libs 
+│   │   ├── ...
+│   ├── MyAdventureGame
+│   │   ├──...
+│   ├── MyAdventureGame.codea
+│   │   ├──...
+│   ├── MyAdventureGame.xcodeproj
+│   │   ├──...
+│   └── libversion
 ├── README.md
 ├── Vim 列编辑功能详细讲解.md
 ├── assets
-│   ├── IMG_0097.PNG
-│   ├── IMG_0099.JPG
-│   ├── IMG_0100.PNG
-│   ├── c04.mp4
-│   ├── cat.JPG
+│   ├── ...
 │   └── runner.png
 ├── src
 │   ├── c01.lua
@@ -537,16 +550,5 @@ Air:Write-A-Adventure-Game-From-Zero admin$ tree
 Air:Write-A-Adventure-Game-From-Zero admin$ 
 ```
 
-### 开源中国项目文档链接
-
-[从零开始写一个武侠冒险游戏-0-开发框架Codea简介](http://my.oschina.net/freeblues/blog/698645)   
-[从零开始写一个武侠冒险游戏-1-状态原型](http://my.oschina.net/freeblues/blog/687421)   
-[从零开始写一个武侠冒险游戏-2-帧动画](http://my.oschina.net/freeblues/blog/689399)  
-[从零开始写一个武侠冒险游戏-3-地图生成](http://my.oschina.net/freeblues/blog/690618)  
-[从零开始写一个武侠冒险游戏-4-第一次整合](http://my.oschina.net/freeblues/blog/690718)  
-[从零开始写一个武侠冒险游戏-5-使用协程](http://my.oschina.net/freeblues/blog/691552)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(1)](http://my.oschina.net/freeblues/blog/694246)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(2)](http://my.oschina.net/freeblues/blog/698529)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(3)](http://my.oschina.net/freeblues/blog/700143)
 
 

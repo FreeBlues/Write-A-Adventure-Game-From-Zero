@@ -1,5 +1,10 @@
 #	从零开始写一个武侠冒险游戏-0-开发框架Codea简介
 
+-	作者:FreeBlues
+-	修订记录
+	-	2016.06.21 初稿完成.
+	- 	2016.08.03 增加对 `XCode` 项目文件的说明.
+	 
 ##	概述
 
 本游戏全程使用一款运行于 `iPad` 上的开发工具类 `APP`--`Codea` 来开发, `Codea` 是一款 `轻量级` + `全功能`的开发工具, 它既是一个:
@@ -227,6 +232,48 @@ end
 
 而且你也可以在 `XCode` 中修改代码, 重新编译查看效果.
 
+###    XCode项目文件夹结构
+
+项目文件夹结构如下:
+
+```
+Air:Write-A-Adventure-Game-From-Zero admin$ tree
+.
+MyAdventureGame
+├── Assets
+│   ├── ...
+├── Libs 
+│   ├── ...
+├── MyAdventureGame
+│   ├──...
+├── MyAdventureGame.codea
+│   ├──...
+├── MyAdventureGame.xcodeproj
+│   ├──...
+└── libversion
+
+```
+
+其中我们编写的 `Lua` 脚本放在 `MyAdventureGame.codea` 目录下, 以 `main.lua` 命名, 如下:
+
+```
+Air:Write-A-Adventure-Game-From-Zero admin$ tree ./MyAdventureGame/MyAdventureGame.codea
+./MyAdventureGame/MyAdventureGame.codea
+├── Info.plist
+├── Main.lua
+├── Sprites.lua
+└── Status.lua
+
+0 directories, 4 files
+Air:Write-A-Adventure-Game-From-Zero admin$ 
+```
+
+###	Codea的运行时库文件
+
+-	注意: 在用 `XCode` 编译项目时, 需要用到 `Codea` 的两个库文件: `libcodea.a` 和 `libtools.a`.
+
+当前版本 `2.3.2`, `XCode` 会自动从 `Codea` 官网下载, 不过貌似会被屏蔽, 再加上这两个文件稍微大了点(一个`20` M, 一个 `50`M), 就没有放在 `github` 上, 改为放到百度网盘上[Codea库文件下载](http://pan.baidu.com/s/1jIpW7zC), 下载回来后解压得到名为 `libcodea.a` 和 `libtools.a` 的两个文件, 将其拷贝到项目文件夹的 `Libs` 目录下即可.
+
 ## 参考资源
 
 [官网函数手册](https://codea.io/reference/index.html)  
@@ -238,19 +285,27 @@ end
 
 ###	Github项目地址
 
-[Github项目地址](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero), 源代码放在 `src/` 目录下, 图片素材放在 `assets/` 目录下, 整个项目文件结构如下:
+[Github项目地址](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero), 源代码放在 `src/` 目录下, 图片素材放在 `assets/` 目录下, `XCode`项目文件放在 `MyAdventureGame` 目录下,  整个项目文件结构如下:
 
 ```
 Air:Write-A-Adventure-Game-From-Zero admin$ tree
 .
+├── MyAdventureGame
+│   ├── Assets
+│   │   ├── ...
+│   ├── Libs 
+│   │   ├── ...
+│   ├── MyAdventureGame
+│   │   ├──...
+│   ├── MyAdventureGame.codea
+│   │   ├──...
+│   ├── MyAdventureGame.xcodeproj
+│   │   ├──...
+│   └── libversion
 ├── README.md
 ├── Vim 列编辑功能详细讲解.md
 ├── assets
-│   ├── IMG_0097.PNG
-│   ├── IMG_0099.JPG
-│   ├── IMG_0100.PNG
-│   ├── c04.mp4
-│   ├── cat.JPG
+│   ├── ...
 │   └── runner.png
 ├── src
 │   ├── c01.lua
@@ -275,18 +330,6 @@ Air:Write-A-Adventure-Game-From-Zero admin$ tree
 2 directories, 26 files
 Air:Write-A-Adventure-Game-From-Zero admin$ 
 ```
-
-### 开源中国项目文档链接
-
-[从零开始写一个武侠冒险游戏-0-开发框架Codea简介](http://my.oschina.net/freeblues/blog/698645)   
-[从零开始写一个武侠冒险游戏-1-状态原型](http://my.oschina.net/freeblues/blog/687421)   
-[从零开始写一个武侠冒险游戏-2-帧动画](http://my.oschina.net/freeblues/blog/689399)  
-[从零开始写一个武侠冒险游戏-3-地图生成](http://my.oschina.net/freeblues/blog/690618)  
-[从零开始写一个武侠冒险游戏-4-第一次整合](http://my.oschina.net/freeblues/blog/690718)  
-[从零开始写一个武侠冒险游戏-5-使用协程](http://my.oschina.net/freeblues/blog/691552)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(1)](http://my.oschina.net/freeblues/blog/694246)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(2)](http://my.oschina.net/freeblues/blog/698529)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(3)](http://my.oschina.net/freeblues/blog/700143)
 
 
 

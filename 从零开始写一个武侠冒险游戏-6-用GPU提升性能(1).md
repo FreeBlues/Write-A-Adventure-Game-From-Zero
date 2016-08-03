@@ -1,5 +1,10 @@
 #	从零开始写一个武侠冒险游戏-6-用GPU提升性能(1)
 
+-	作者:FreeBlues
+-	修订记录
+	-	2016.06.19 初稿完成.
+	- 	2016.08.03 增加对 `XCode` 项目文件的说明.
+
 ##	概述
 
 我们之前所有的绘图工作都是直接使用基本绘图函数来绘制的, 这样写出来的代码容易理解, 不过这些代码基本都是由 `CPU` 来执行的, 没怎么发挥出 `GPU` 的作用, 实际上现在的移动设备都有着功能不弱的 `GPU`(一般都支持 `OpenGL ES 2.0/3.0`), 本章的目标就是把我们游戏中绘图相关的大部分工作都转移到 `GPU` 上, 这样既可以解决我们代码目前存在的一些小问题, 同时也会带来很多额外好处:
@@ -665,19 +670,27 @@ void main()
 
 ###	Github项目地址
 
-[Github项目地址](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero), 源代码放在 `src/` 目录下, 图片素材放在 `assets/` 目录下, 整个项目文件结构如下:
+[Github项目地址](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero), 源代码放在 `src/` 目录下, 图片素材放在 `assets/` 目录下, `XCode`项目文件放在 `MyAdventureGame` 目录下,  整个项目文件结构如下:
 
 ```
 Air:Write-A-Adventure-Game-From-Zero admin$ tree
 .
+├── MyAdventureGame
+│   ├── Assets
+│   │   ├── ...
+│   ├── Libs 
+│   │   ├── ...
+│   ├── MyAdventureGame
+│   │   ├──...
+│   ├── MyAdventureGame.codea
+│   │   ├──...
+│   ├── MyAdventureGame.xcodeproj
+│   │   ├──...
+│   └── libversion
 ├── README.md
 ├── Vim 列编辑功能详细讲解.md
 ├── assets
-│   ├── IMG_0097.PNG
-│   ├── IMG_0099.JPG
-│   ├── IMG_0100.PNG
-│   ├── c04.mp4
-│   ├── cat.JPG
+│   ├── ...
 │   └── runner.png
 ├── src
 │   ├── c01.lua
@@ -703,15 +716,4 @@ Air:Write-A-Adventure-Game-From-Zero admin$ tree
 Air:Write-A-Adventure-Game-From-Zero admin$ 
 ```
 
-### 开源中国项目文档链接
-
-[从零开始写一个武侠冒险游戏-0-开发框架Codea简介](http://my.oschina.net/freeblues/blog/698645)   
-[从零开始写一个武侠冒险游戏-1-状态原型](http://my.oschina.net/freeblues/blog/687421)   
-[从零开始写一个武侠冒险游戏-2-帧动画](http://my.oschina.net/freeblues/blog/689399)  
-[从零开始写一个武侠冒险游戏-3-地图生成](http://my.oschina.net/freeblues/blog/690618)  
-[从零开始写一个武侠冒险游戏-4-第一次整合](http://my.oschina.net/freeblues/blog/690718)  
-[从零开始写一个武侠冒险游戏-5-使用协程](http://my.oschina.net/freeblues/blog/691552)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(1)](http://my.oschina.net/freeblues/blog/694246)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(2)](http://my.oschina.net/freeblues/blog/698529)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(3)](http://my.oschina.net/freeblues/blog/700143)
 

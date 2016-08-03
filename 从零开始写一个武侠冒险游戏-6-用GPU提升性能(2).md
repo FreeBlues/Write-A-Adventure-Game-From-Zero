@@ -1,5 +1,10 @@
 #	从零开始写一个武侠冒险游戏-6-用GPU提升性能(2)
 
+-	作者:FreeBlues
+-	修订记录
+	-	2016.06.21 初稿完成.
+	- 	2016.08.03 增加对 `XCode` 项目文件的说明.
+
 ##	概述
 
 用 `mesh` 改写地图类, 带来的一大好处是控制逻辑可以变得非常简单, 作为一个地图类, 最基本的控制逻辑就是显示哪一部分和地图如何卷动, 而这两点可以通过 `mesh` 的纹理贴图非常容易地解决, 因为在 `OpenGL ES 2.0/3.0` 中, 可以通过设置纹理坐标来决定如何在地图上显示纹理贴图, 而这些控制逻辑如果不用 `mesh`, 自己去写, 就有些繁琐了, 不信你可以试试. 
@@ -1012,19 +1017,27 @@ void main()
 
 ###	Github项目地址
 
-[Github项目地址](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero), 源代码放在 `src/` 目录下, 图片素材放在 `assets/` 目录下, 整个项目文件结构如下:
+[Github项目地址](https://github.com/FreeBlues/Write-A-Adventure-Game-From-Zero), 源代码放在 `src/` 目录下, 图片素材放在 `assets/` 目录下, `XCode`项目文件放在 `MyAdventureGame` 目录下,  整个项目文件结构如下:
 
 ```
 Air:Write-A-Adventure-Game-From-Zero admin$ tree
 .
+├── MyAdventureGame
+│   ├── Assets
+│   │   ├── ...
+│   ├── Libs 
+│   │   ├── ...
+│   ├── MyAdventureGame
+│   │   ├──...
+│   ├── MyAdventureGame.codea
+│   │   ├──...
+│   ├── MyAdventureGame.xcodeproj
+│   │   ├──...
+│   └── libversion
 ├── README.md
 ├── Vim 列编辑功能详细讲解.md
 ├── assets
-│   ├── IMG_0097.PNG
-│   ├── IMG_0099.JPG
-│   ├── IMG_0100.PNG
-│   ├── c04.mp4
-│   ├── cat.JPG
+│   ├── ...
 │   └── runner.png
 ├── src
 │   ├── c01.lua
@@ -1050,14 +1063,3 @@ Air:Write-A-Adventure-Game-From-Zero admin$ tree
 Air:Write-A-Adventure-Game-From-Zero admin$ 
 ```
 
-### 开源中国项目文档链接
-
-[从零开始写一个武侠冒险游戏-0-开发框架Codea简介](http://my.oschina.net/freeblues/blog/698645)   
-[从零开始写一个武侠冒险游戏-1-状态原型](http://my.oschina.net/freeblues/blog/687421)   
-[从零开始写一个武侠冒险游戏-2-帧动画](http://my.oschina.net/freeblues/blog/689399)  
-[从零开始写一个武侠冒险游戏-3-地图生成](http://my.oschina.net/freeblues/blog/690618)  
-[从零开始写一个武侠冒险游戏-4-第一次整合](http://my.oschina.net/freeblues/blog/690718)  
-[从零开始写一个武侠冒险游戏-5-使用协程](http://my.oschina.net/freeblues/blog/691552)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(1)](http://my.oschina.net/freeblues/blog/694246)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(2)](http://my.oschina.net/freeblues/blog/698529)  
-[从零开始写一个武侠冒险游戏-6-用GPU提升性能(3)](http://my.oschina.net/freeblues/blog/700143)
