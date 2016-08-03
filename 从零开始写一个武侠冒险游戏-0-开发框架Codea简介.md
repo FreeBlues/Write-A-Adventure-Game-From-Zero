@@ -123,11 +123,85 @@ end
 ```
 如果读者有过使用 `Processing` 或 `OpenFrameWorks` 的经验, 就比较熟悉这种框架了, 这种框架的优点就是结构简单易懂, 流程非常清晰, 容易上手, 而且功能也不弱, 反而 `Cocos2d-x` 的那种又是场景, 又是导演的框架比较麻烦.
 
-如果你愿意, 也很容易在它的基础上自己搞一个 `MVC` 架构出来, 如果你想实现更复杂的流程控制, 也可以通过 `Lua` 的 `coroutine` 自行扩展, 也可以参考本教程提供的用 `coroutine` 实现的 `Threads` 类.
+如果你愿意, 也很容易在它的基础上自己搞一个 `MVC` 架构出来, 如果你想实现更复杂的流程控制, 可以通过 `Lua` 的 `coroutine` 自行扩展, 也可以参考本教程提供的用 `coroutine` 实现的 `Threads` 类.
 
 ##	主要函数说明
 
---后续补充	
+`Codea` 的函数大多数都支持可变参数, 根据输入实参的个数决定对应哪些形参, 好像在面向对象中叫多态. 下面在每种函数中选择两个常用的函数
+
+###	`基本绘图函数`
+
+-	background( )
+	-	语法 
+	-	background( gray )
+	-	background( gray, alpha )
+	-	background( red, green, blue )
+	-	background( red, green, blue, alpha )
+	-	background( color ) 
+
+-	rect( )
+	-	语法
+	-	rect( x, y, width, height ) 
+
+-	sprite( name, x, y )
+	- 	语法
+	- 	sprite( name, x, y )
+	-	sprite( name, x, y, width )
+	-	sprite( name, x, y, width, height )
+	-	sprite( image, x, y )
+	-	sprite( image, x, y, width )
+	-	sprite( image, x, y, width, height )  
+	
+###	`高级绘图函数`
+
+提供 `shader` 和 `mesh` 
+
+支持 `OpenGL ES 2.0/3.0` 
+
+###	`Lua 语言`	
+
+`Lua`中的 `表`, `时间`,`字符串`和`数学运算` 以及一部分 `os` 函数
+
+###	`触控函数` 
+
+负责处理屏幕触摸事件;
+
+###	`调试函数`
+
+负责处理程序调试工作;
+
+###	`物理模拟函数`
+
+封装 `box2D` 提供了相关的物理模拟函数;
+
+###	`动画函数`
+
+一个专门的动画类, 可以利用它来实现各种动画效果;
+
+###	`声音函数`
+
+负责处理播放声音以及生成各种音效;
+
+###	`显示函数`
+
+负责处理显示模式设置以及视频录制等等
+
+###	`矢量函数`
+
+提供了二维, 三维, 四维向量以及相关的各种操作;
+
+###	`传感器函数`
+
+负责处理 `GPS` 定位传感器和 `加速度` 传感器;
+
+###	`网络函数`
+
+提供了封装后的 `http.request()` 函数
+
+###	`存储函数`
+
+提供了各种存取函数, 用于存取游戏数据到 `iPad` 上.
+
 
 ##	其他在 iPad 上运行的开发工具
 

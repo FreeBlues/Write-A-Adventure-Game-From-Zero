@@ -1,0 +1,539 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DB0DC0AE18C459EC005F4723 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB0DC0AD18C459EC005F4723 /* Images.xcassets */; };
+		DB0DC0B618C46085005F4723 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB0DC0B518C46085005F4723 /* CoreImage.framework */; };
+		DB0DC0B818C4608A005F4723 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB0DC0B718C4608A005F4723 /* CoreLocation.framework */; };
+		DB0DC0BA18C4608E005F4723 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB0DC0B918C4608E005F4723 /* Accelerate.framework */; };
+		DB3B3F6317815CFE00A992DB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB3B3F6217815CFE00A992DB /* Security.framework */; };
+		DB5578F31BB9185E0024F638 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DB5578F21BB9185E0024F638 /* Assets */; settings = {ASSET_TAGS = (); }; };
+		DB5E404418CD80570001CC1F /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB5E404318CD80570001CC1F /* Social.framework */; };
+		DB8A004716F2DBDA005F87A6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A004616F2DBDA005F87A6 /* UIKit.framework */; };
+		DB8A004916F2DBDA005F87A6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A004816F2DBDA005F87A6 /* Foundation.framework */; };
+		DB8A004B16F2DBDA005F87A6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A004A16F2DBDA005F87A6 /* CoreGraphics.framework */; };
+		DB8A005116F2DBDA005F87A6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DB8A004F16F2DBDA005F87A6 /* InfoPlist.strings */; };
+		DB8A005316F2DBDA005F87A6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DB8A005216F2DBDA005F87A6 /* main.m */; };
+		DB8A005716F2DBDA005F87A6 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB8A005616F2DBDA005F87A6 /* AppDelegate.mm */; };
+		DB8A006816F2E019005F87A6 /* libcodea.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A006316F2E019005F87A6 /* libcodea.a */; };
+		DB8A006A16F2E019005F87A6 /* libtools.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A006516F2E019005F87A6 /* libtools.a */; };
+		DB8A006B16F2E019005F87A6 /* RuntimeResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DB8A006616F2E019005F87A6 /* RuntimeResources.bundle */; };
+		DB8A006C16F2E019005F87A6 /* ToolsResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DB8A006716F2E019005F87A6 /* ToolsResources.bundle */; };
+		DB8A006F16F2E039005F87A6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A006E16F2E039005F87A6 /* QuartzCore.framework */; };
+		DB8A007116F2E069005F87A6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A007016F2E069005F87A6 /* CoreMotion.framework */; };
+		DB8A007516F2E073005F87A6 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A007416F2E073005F87A6 /* libicucore.dylib */; };
+		DB8A007716F2E084005F87A6 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A007616F2E084005F87A6 /* OpenAL.framework */; };
+		DB8A007916F2E089005F87A6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A007816F2E089005F87A6 /* AudioToolbox.framework */; };
+		DB8A007B16F2E096005F87A6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A007A16F2E096005F87A6 /* AVFoundation.framework */; };
+		DB8A007D16F2E09A005F87A6 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A007C16F2E09A005F87A6 /* CoreVideo.framework */; };
+		DB8A007F16F2E09E005F87A6 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A007E16F2E09E005F87A6 /* AssetsLibrary.framework */; };
+		DB8A008116F2E0A7005F87A6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A008016F2E0A7005F87A6 /* libz.dylib */; };
+		DB8A008316F2E0B0005F87A6 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A008216F2E0B0005F87A6 /* MobileCoreServices.framework */; };
+		DB8A008516F2E0B9005F87A6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A008416F2E0B9005F87A6 /* SystemConfiguration.framework */; };
+		DB8A008716F2E0BE005F87A6 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A008616F2E0BE005F87A6 /* CFNetwork.framework */; };
+		DB8A008916F2E0C3005F87A6 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A008816F2E0C3005F87A6 /* CoreText.framework */; };
+		DB8A008B16F2E0CF005F87A6 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A008A16F2E0CF005F87A6 /* GLKit.framework */; };
+		DB8A008D16F2E0D3005F87A6 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A008C16F2E0D3005F87A6 /* OpenGLES.framework */; };
+		DB8A009216F2E497005F87A6 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB8A009116F2E497005F87A6 /* CoreMedia.framework */; };
+		DB8A00A416F2E859005F87A6 /* Inconsolata.otf in Resources */ = {isa = PBXBuildFile; fileRef = DB8A00A016F2E859005F87A6 /* Inconsolata.otf */; };
+		DB8A00A516F2E859005F87A6 /* SourceSansPro-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DB8A00A116F2E859005F87A6 /* SourceSansPro-Bold.otf */; };
+		DB8A00A616F2E859005F87A6 /* SourceSansPro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = DB8A00A216F2E859005F87A6 /* SourceSansPro-Regular.otf */; };
+		DB8A00A716F2E859005F87A6 /* SourceSansPro-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = DB8A00A316F2E859005F87A6 /* SourceSansPro-Semibold.otf */; };
+		DB8A015C16F73DFF005F87A6 /* MyAdventureGame.codea in Resources */ = {isa = PBXBuildFile; fileRef = DB8A015B16F73DFF005F87A6 /* MyAdventureGame.codea */; };
+		DBC21B9719EBF2B000CD519E /* CodeaAddon.m in Sources */ = {isa = PBXBuildFile; fileRef = DBC21B9619EBF2B000CD519E /* CodeaAddon.m */; };
+		DBC21B9C19ED75A000CD519E /* GameCenterAddon.m in Sources */ = {isa = PBXBuildFile; fileRef = DBCE375F19E9F77800E382EC /* GameCenterAddon.m */; };
+		DBCE376219E9F82D00E382EC /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBCE376119E9F82D00E382EC /* GameKit.framework */; };
+		DBE0BEA31A8B693D0010DC06 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBE0BEA21A8B693D0010DC06 /* iAd.framework */; };
+		DBEA4FC31BC23A0200000A55 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DBEA4FC21BC23A0200000A55 /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
+		DBEA4FC81BC243D800000A55 /* LaunchBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEA4FC41BC243D800000A55 /* LaunchBackground.png */; settings = {ASSET_TAGS = (); }; };
+		DBEA4FC91BC243D800000A55 /* LaunchLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEA4FC51BC243D800000A55 /* LaunchLogo.png */; settings = {ASSET_TAGS = (); }; };
+		DBEA4FCA1BC243D800000A55 /* LaunchLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEA4FC61BC243D800000A55 /* LaunchLogo@2x.png */; settings = {ASSET_TAGS = (); }; };
+		DBEA4FCB1BC243D800000A55 /* LaunchLogo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DBEA4FC71BC243D800000A55 /* LaunchLogo@3x.png */; settings = {ASSET_TAGS = (); }; };
+		DBF0F5A91A3D0B78007693C1 /* iAdsAddon.m in Sources */ = {isa = PBXBuildFile; fileRef = DBF0F5A71A3D0B78007693C1 /* iAdsAddon.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DB0DC0AD18C459EC005F4723 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DB0DC0B518C46085005F4723 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		DB0DC0B718C4608A005F4723 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		DB0DC0B918C4608E005F4723 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		DB3B3F6217815CFE00A992DB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		DB5578F21BB9185E0024F638 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = SOURCE_ROOT; };
+		DB5E404318CD80570001CC1F /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		DB8A004316F2DBDA005F87A6 /* MyAdventureGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyAdventureGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB8A004616F2DBDA005F87A6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DB8A004816F2DBDA005F87A6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DB8A004A16F2DBDA005F87A6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		DB8A004E16F2DBDA005F87A6 /* MyAdventureGame-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MyAdventureGame-Info.plist"; sourceTree = "<group>"; };
+		DB8A005016F2DBDA005F87A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DB8A005216F2DBDA005F87A6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DB8A005416F2DBDA005F87A6 /* MyAdventureGame-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyAdventureGame-Prefix.pch"; sourceTree = "<group>"; };
+		DB8A005516F2DBDA005F87A6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		DB8A005616F2DBDA005F87A6 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		DB8A006316F2E019005F87A6 /* libcodea.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcodea.a; path = Libs/libcodea.a; sourceTree = "<group>"; };
+		DB8A006516F2E019005F87A6 /* libtools.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtools.a; path = Libs/libtools.a; sourceTree = "<group>"; };
+		DB8A006616F2E019005F87A6 /* RuntimeResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = RuntimeResources.bundle; path = Libs/RuntimeResources.bundle; sourceTree = "<group>"; };
+		DB8A006716F2E019005F87A6 /* ToolsResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ToolsResources.bundle; path = Libs/ToolsResources.bundle; sourceTree = "<group>"; };
+		DB8A006E16F2E039005F87A6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		DB8A007016F2E069005F87A6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		DB8A007416F2E073005F87A6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		DB8A007616F2E084005F87A6 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		DB8A007816F2E089005F87A6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		DB8A007A16F2E096005F87A6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		DB8A007C16F2E09A005F87A6 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		DB8A007E16F2E09E005F87A6 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		DB8A008016F2E0A7005F87A6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		DB8A008216F2E0B0005F87A6 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		DB8A008416F2E0B9005F87A6 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		DB8A008616F2E0BE005F87A6 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		DB8A008816F2E0C3005F87A6 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		DB8A008A16F2E0CF005F87A6 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		DB8A008C16F2E0D3005F87A6 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		DB8A008E16F2E166005F87A6 /* StandaloneCodeaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StandaloneCodeaViewController.h; sourceTree = "<group>"; };
+		DB8A009116F2E497005F87A6 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		DB8A00A016F2E859005F87A6 /* Inconsolata.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inconsolata.otf; sourceTree = "<group>"; };
+		DB8A00A116F2E859005F87A6 /* SourceSansPro-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Bold.otf"; sourceTree = "<group>"; };
+		DB8A00A216F2E859005F87A6 /* SourceSansPro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Regular.otf"; sourceTree = "<group>"; };
+		DB8A00A316F2E859005F87A6 /* SourceSansPro-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Semibold.otf"; sourceTree = "<group>"; };
+		DB8A015B16F73DFF005F87A6 /* MyAdventureGame.codea */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MyAdventureGame.codea; sourceTree = "<group>"; };
+		DBC21B9619EBF2B000CD519E /* CodeaAddon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodeaAddon.m; sourceTree = "<group>"; };
+		DBCE375E19E9F77800E382EC /* GameCenterAddon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCenterAddon.h; sourceTree = "<group>"; };
+		DBCE375F19E9F77800E382EC /* GameCenterAddon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameCenterAddon.m; sourceTree = "<group>"; };
+		DBCE376119E9F82D00E382EC /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		DBE0BEA21A8B693D0010DC06 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		DBEA4FC21BC23A0200000A55 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		DBEA4FC41BC243D800000A55 /* LaunchBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchBackground.png; sourceTree = "<group>"; };
+		DBEA4FC51BC243D800000A55 /* LaunchLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchLogo.png; sourceTree = "<group>"; };
+		DBEA4FC61BC243D800000A55 /* LaunchLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchLogo@2x.png"; sourceTree = "<group>"; };
+		DBEA4FC71BC243D800000A55 /* LaunchLogo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchLogo@3x.png"; sourceTree = "<group>"; };
+		DBF0F5A71A3D0B78007693C1 /* iAdsAddon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iAdsAddon.m; sourceTree = "<group>"; };
+		DBF0F5A81A3D0B78007693C1 /* iAdsAddon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iAdsAddon.h; sourceTree = "<group>"; };
+		DBF44365170F00F20026A109 /* CodeaAddon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodeaAddon.h; sourceTree = "<group>"; };
+		DBF44367170F02580026A109 /* lapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lapi.h; sourceTree = "<group>"; };
+		DBF44368170F02580026A109 /* lauxlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lauxlib.h; sourceTree = "<group>"; };
+		DBF44369170F02580026A109 /* llimits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = llimits.h; sourceTree = "<group>"; };
+		DBF4436A170F02580026A109 /* lobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lobject.h; sourceTree = "<group>"; };
+		DBF4436B170F02580026A109 /* lua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua.h; sourceTree = "<group>"; };
+		DBF4436C170F02580026A109 /* luaconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = luaconf.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DB8A004016F2DBDA005F87A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBE0BEA31A8B693D0010DC06 /* iAd.framework in Frameworks */,
+				DBCE376219E9F82D00E382EC /* GameKit.framework in Frameworks */,
+				DB5E404418CD80570001CC1F /* Social.framework in Frameworks */,
+				DB0DC0BA18C4608E005F4723 /* Accelerate.framework in Frameworks */,
+				DB0DC0B818C4608A005F4723 /* CoreLocation.framework in Frameworks */,
+				DB0DC0B618C46085005F4723 /* CoreImage.framework in Frameworks */,
+				DB3B3F6317815CFE00A992DB /* Security.framework in Frameworks */,
+				DB8A009216F2E497005F87A6 /* CoreMedia.framework in Frameworks */,
+				DB8A008D16F2E0D3005F87A6 /* OpenGLES.framework in Frameworks */,
+				DB8A008B16F2E0CF005F87A6 /* GLKit.framework in Frameworks */,
+				DB8A008916F2E0C3005F87A6 /* CoreText.framework in Frameworks */,
+				DB8A008716F2E0BE005F87A6 /* CFNetwork.framework in Frameworks */,
+				DB8A008516F2E0B9005F87A6 /* SystemConfiguration.framework in Frameworks */,
+				DB8A008316F2E0B0005F87A6 /* MobileCoreServices.framework in Frameworks */,
+				DB8A004B16F2DBDA005F87A6 /* CoreGraphics.framework in Frameworks */,
+				DB8A008116F2E0A7005F87A6 /* libz.dylib in Frameworks */,
+				DB8A007F16F2E09E005F87A6 /* AssetsLibrary.framework in Frameworks */,
+				DB8A007D16F2E09A005F87A6 /* CoreVideo.framework in Frameworks */,
+				DB8A007B16F2E096005F87A6 /* AVFoundation.framework in Frameworks */,
+				DB8A007916F2E089005F87A6 /* AudioToolbox.framework in Frameworks */,
+				DB8A007716F2E084005F87A6 /* OpenAL.framework in Frameworks */,
+				DB8A007516F2E073005F87A6 /* libicucore.dylib in Frameworks */,
+				DB8A007116F2E069005F87A6 /* CoreMotion.framework in Frameworks */,
+				DB8A006F16F2E039005F87A6 /* QuartzCore.framework in Frameworks */,
+				DB8A004716F2DBDA005F87A6 /* UIKit.framework in Frameworks */,
+				DB8A004916F2DBDA005F87A6 /* Foundation.framework in Frameworks */,
+				DB8A006816F2E019005F87A6 /* libcodea.a in Frameworks */,
+				DB8A006A16F2E019005F87A6 /* libtools.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DB8A003A16F2DBDA005F87A6 = {
+			isa = PBXGroup;
+			children = (
+				DB8A015B16F73DFF005F87A6 /* MyAdventureGame.codea */,
+				DB8A004C16F2DBDA005F87A6 /* MyAdventureGame */,
+				DB8A004516F2DBDA005F87A6 /* Frameworks */,
+				DB8A004416F2DBDA005F87A6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DB8A004416F2DBDA005F87A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DB8A004316F2DBDA005F87A6 /* MyAdventureGame.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DB8A004516F2DBDA005F87A6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DBE0BEA21A8B693D0010DC06 /* iAd.framework */,
+				DBCE376119E9F82D00E382EC /* GameKit.framework */,
+				DB5E404318CD80570001CC1F /* Social.framework */,
+				DB0DC0B918C4608E005F4723 /* Accelerate.framework */,
+				DB0DC0B718C4608A005F4723 /* CoreLocation.framework */,
+				DB0DC0B518C46085005F4723 /* CoreImage.framework */,
+				DB8A006316F2E019005F87A6 /* libcodea.a */,
+				DB8A006516F2E019005F87A6 /* libtools.a */,
+				DB8A006616F2E019005F87A6 /* RuntimeResources.bundle */,
+				DB8A006716F2E019005F87A6 /* ToolsResources.bundle */,
+				DB3B3F6217815CFE00A992DB /* Security.framework */,
+				DB8A009116F2E497005F87A6 /* CoreMedia.framework */,
+				DB8A008C16F2E0D3005F87A6 /* OpenGLES.framework */,
+				DB8A008A16F2E0CF005F87A6 /* GLKit.framework */,
+				DB8A008816F2E0C3005F87A6 /* CoreText.framework */,
+				DB8A008616F2E0BE005F87A6 /* CFNetwork.framework */,
+				DB8A008416F2E0B9005F87A6 /* SystemConfiguration.framework */,
+				DB8A008216F2E0B0005F87A6 /* MobileCoreServices.framework */,
+				DB8A008016F2E0A7005F87A6 /* libz.dylib */,
+				DB8A007E16F2E09E005F87A6 /* AssetsLibrary.framework */,
+				DB8A007C16F2E09A005F87A6 /* CoreVideo.framework */,
+				DB8A007A16F2E096005F87A6 /* AVFoundation.framework */,
+				DB8A007816F2E089005F87A6 /* AudioToolbox.framework */,
+				DB8A007616F2E084005F87A6 /* OpenAL.framework */,
+				DB8A007416F2E073005F87A6 /* libicucore.dylib */,
+				DB8A007016F2E069005F87A6 /* CoreMotion.framework */,
+				DB8A006E16F2E039005F87A6 /* QuartzCore.framework */,
+				DB8A004616F2DBDA005F87A6 /* UIKit.framework */,
+				DB8A004816F2DBDA005F87A6 /* Foundation.framework */,
+				DB8A004A16F2DBDA005F87A6 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DB8A004C16F2DBDA005F87A6 /* MyAdventureGame */ = {
+			isa = PBXGroup;
+			children = (
+				DBF44366170F02580026A109 /* Lua */,
+				DBF44364170F00F20026A109 /* Addons */,
+				DB8A008E16F2E166005F87A6 /* StandaloneCodeaViewController.h */,
+				DB8A005516F2DBDA005F87A6 /* AppDelegate.h */,
+				DB8A005616F2DBDA005F87A6 /* AppDelegate.mm */,
+				DB8A009F16F2E859005F87A6 /* Resources */,
+				DB0DC0AD18C459EC005F4723 /* Images.xcassets */,
+				DB8A004D16F2DBDA005F87A6 /* Supporting Files */,
+			);
+			path = MyAdventureGame;
+			sourceTree = "<group>";
+		};
+		DB8A004D16F2DBDA005F87A6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DBEA4FC21BC23A0200000A55 /* Launch Screen.storyboard */,
+				DB8A004E16F2DBDA005F87A6 /* MyAdventureGame-Info.plist */,
+				DB8A004F16F2DBDA005F87A6 /* InfoPlist.strings */,
+				DB8A005216F2DBDA005F87A6 /* main.m */,
+				DB8A005416F2DBDA005F87A6 /* MyAdventureGame-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DB8A009F16F2E859005F87A6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DB5578F21BB9185E0024F638 /* Assets */,
+				DB8A00A016F2E859005F87A6 /* Inconsolata.otf */,
+				DB8A00A116F2E859005F87A6 /* SourceSansPro-Bold.otf */,
+				DB8A00A216F2E859005F87A6 /* SourceSansPro-Regular.otf */,
+				DB8A00A316F2E859005F87A6 /* SourceSansPro-Semibold.otf */,
+				DBEA4FC41BC243D800000A55 /* LaunchBackground.png */,
+				DBEA4FC51BC243D800000A55 /* LaunchLogo.png */,
+				DBEA4FC61BC243D800000A55 /* LaunchLogo@2x.png */,
+				DBEA4FC71BC243D800000A55 /* LaunchLogo@3x.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DBCE375D19E9F74E00E382EC /* Extra */ = {
+			isa = PBXGroup;
+			children = (
+				DBF0F5A71A3D0B78007693C1 /* iAdsAddon.m */,
+				DBF0F5A81A3D0B78007693C1 /* iAdsAddon.h */,
+				DBCE375E19E9F77800E382EC /* GameCenterAddon.h */,
+				DBCE375F19E9F77800E382EC /* GameCenterAddon.m */,
+			);
+			path = Extra;
+			sourceTree = "<group>";
+		};
+		DBF44364170F00F20026A109 /* Addons */ = {
+			isa = PBXGroup;
+			children = (
+				DBCE375D19E9F74E00E382EC /* Extra */,
+				DBF44365170F00F20026A109 /* CodeaAddon.h */,
+				DBC21B9619EBF2B000CD519E /* CodeaAddon.m */,
+			);
+			path = Addons;
+			sourceTree = "<group>";
+		};
+		DBF44366170F02580026A109 /* Lua */ = {
+			isa = PBXGroup;
+			children = (
+				DBF44367170F02580026A109 /* lapi.h */,
+				DBF44368170F02580026A109 /* lauxlib.h */,
+				DBF44369170F02580026A109 /* llimits.h */,
+				DBF4436A170F02580026A109 /* lobject.h */,
+				DBF4436B170F02580026A109 /* lua.h */,
+				DBF4436C170F02580026A109 /* luaconf.h */,
+			);
+			path = Lua;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DB8A004216F2DBDA005F87A6 /* MyAdventureGame */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DB8A006016F2DBDA005F87A6 /* Build configuration list for PBXNativeTarget "MyAdventureGame" */;
+			buildPhases = (
+				DB8A00BC16F551C4005F87A6 /* ShellScript */,
+				DB8A003F16F2DBDA005F87A6 /* Sources */,
+				DB8A004016F2DBDA005F87A6 /* Frameworks */,
+				DB8A004116F2DBDA005F87A6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyAdventureGame;
+			productName = MyAdventureGame;
+			productReference = DB8A004316F2DBDA005F87A6 /* MyAdventureGame.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DB8A003B16F2DBDA005F87A6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = MyCompany;
+			};
+			buildConfigurationList = DB8A003E16F2DBDA005F87A6 /* Build configuration list for PBXProject "MyAdventureGame" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DB8A003A16F2DBDA005F87A6;
+			productRefGroup = DB8A004416F2DBDA005F87A6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DB8A004216F2DBDA005F87A6 /* MyAdventureGame */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DB8A004116F2DBDA005F87A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB8A005116F2DBDA005F87A6 /* InfoPlist.strings in Resources */,
+				DB8A006B16F2E019005F87A6 /* RuntimeResources.bundle in Resources */,
+				DBEA4FC81BC243D800000A55 /* LaunchBackground.png in Resources */,
+				DBEA4FCB1BC243D800000A55 /* LaunchLogo@3x.png in Resources */,
+				DB8A006C16F2E019005F87A6 /* ToolsResources.bundle in Resources */,
+				DB8A00A416F2E859005F87A6 /* Inconsolata.otf in Resources */,
+				DB8A00A516F2E859005F87A6 /* SourceSansPro-Bold.otf in Resources */,
+				DBEA4FCA1BC243D800000A55 /* LaunchLogo@2x.png in Resources */,
+				DB5578F31BB9185E0024F638 /* Assets in Resources */,
+				DBEA4FC31BC23A0200000A55 /* Launch Screen.storyboard in Resources */,
+				DBEA4FC91BC243D800000A55 /* LaunchLogo.png in Resources */,
+				DB8A00A616F2E859005F87A6 /* SourceSansPro-Regular.otf in Resources */,
+				DB8A00A716F2E859005F87A6 /* SourceSansPro-Semibold.otf in Resources */,
+				DB0DC0AE18C459EC005F4723 /* Images.xcassets in Resources */,
+				DB8A015C16F73DFF005F87A6 /* MyAdventureGame.codea in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DB8A00BC16F551C4005F87A6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "MVERS=`cat libversion`\n\necho \"note: building against lib version $MVERS.\"\n\nif [ ! -f \"$PROJECT_DIR/Libs/libcodea.a\" ]\nthen\n    echo \"note: Downloading Codea Library...\"\n    curl -o \"$PROJECT_DIR/Libs/libcodea.a.gz\" \"http://codea.io/lib/libcodea-$MVERS.a.gz\"\n\n    if [[ $? == 0 ]]\n    then\n        gunzip \"$PROJECT_DIR/Libs/libcodea.a.gz\"\n    else\n        echo \"error: Failed to Download Codea Library. Please ensure you have an active Internet connection.\"\n        return 1\n    fi\nfi\n\nif [ ! -f \"$PROJECT_DIR/Libs/libtools.a\" ]\nthen\n    echo \"note: Downloading Tools Library...\"\n    curl -o \"$PROJECT_DIR/Libs/libtools.a.gz\" \"http://codea.io/lib/libtools-$MVERS.a.gz\"\n\n    if [[ $? == 0 ]]\n    then\n        gunzip \"$PROJECT_DIR/Libs/libtools.a.gz\"\n    else\n        echo \"error: Failed to Download Tools Library. Please ensure you have an active Internet connection.\"\n        return 1\n    fi\nfi\n\n\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DB8A003F16F2DBDA005F87A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBC21B9719EBF2B000CD519E /* CodeaAddon.m in Sources */,
+				DBC21B9C19ED75A000CD519E /* GameCenterAddon.m in Sources */,
+				DBF0F5A91A3D0B78007693C1 /* iAdsAddon.m in Sources */,
+				DB8A005316F2DBDA005F87A6 /* main.m in Sources */,
+				DB8A005716F2DBDA005F87A6 /* AppDelegate.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		DB8A004F16F2DBDA005F87A6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DB8A005016F2DBDA005F87A6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DB8A005E16F2DBDA005F87A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DB8A005F16F2DBDA005F87A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DB8A006116F2DBDA005F87A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MyAdventureGame/MyAdventureGame-Prefix.pch";
+				INFOPLIST_FILE = "MyAdventureGame/MyAdventureGame-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Libs\"",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DB8A006216F2DBDA005F87A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MyAdventureGame/MyAdventureGame-Prefix.pch";
+				INFOPLIST_FILE = "MyAdventureGame/MyAdventureGame-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Libs\"",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DB8A003E16F2DBDA005F87A6 /* Build configuration list for PBXProject "MyAdventureGame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DB8A005E16F2DBDA005F87A6 /* Debug */,
+				DB8A005F16F2DBDA005F87A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DB8A006016F2DBDA005F87A6 /* Build configuration list for PBXNativeTarget "MyAdventureGame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DB8A006116F2DBDA005F87A6 /* Debug */,
+				DB8A006216F2DBDA005F87A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DB8A003B16F2DBDA005F87A6 /* Project object */;
+}

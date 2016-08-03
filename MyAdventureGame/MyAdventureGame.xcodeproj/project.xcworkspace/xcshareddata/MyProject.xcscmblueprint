@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "2EA786190B9CC3CF9C266B4B422FA3CC010635CB",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "2EA786190B9CC3CF9C266B4B422FA3CC010635CB" : 0,
+    "C04D0147411E78C71DCD4B0A236586F5A657A149" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "71754BC1-BEDF-47EE-8AED-FE7F51921484",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "2EA786190B9CC3CF9C266B4B422FA3CC010635CB" : "Core\/",
+    "C04D0147411E78C71DCD4B0A236586F5A657A149" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MyProject",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Other\/MyProject\/MyProject.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "bitbucket.org:TwoLivesLeft\/core.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2EA786190B9CC3CF9C266B4B422FA3CC010635CB"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "bitbucket.org:TwoLivesLeft\/codea-super.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C04D0147411E78C71DCD4B0A236586F5A657A149"
+    }
+  ]
+}
