@@ -274,12 +274,16 @@ Air:Write-A-Adventure-Game-From-Zero admin$
 
 当前版本 `2.3.2`, `XCode` 会自动从 `Codea` 官网下载, 不过貌似会被屏蔽, 再加上这两个文件稍微大了点(一个`20` M, 一个 `50`M), 就没有放在 `github` 上, 改为放到百度网盘上[Codea库文件下载](http://pan.baidu.com/s/1jIpW7zC), 下载回来后解压得到名为 `libcodea.a` 和 `libtools.a` 的两个文件, 将其拷贝到项目文件夹的 `Libs` 目录下即可.
 
+###	在XCode中运行本项目
+
+因为每一章最终都会给出本章实现的完整代码, 例如第一章的完整代码名为 `c01.lua`, 第二章的完整代码为 `c02.lua`, 以此类推, 在使用时可以将其改名为 `main.lua`, 然后替换掉 `XCode` 项目文件夹 `MyAdventureGame/MyAdventureGame.codea` 目录下的 `main.lua`, 
+
 ## 参考资源
 
 [官网函数手册](https://codea.io/reference/index.html)  
 [官方wiki](https://bitbucket.org/TwoLivesLeft/core/wiki/)  
 [官网论坛](https://codea.io/talk/discussions)  
-[中文函数手册]()
+[中文函数手册](http://translate.twolivesleft.com/project/codea/zh-CN#)
 
 ## 所有章节链接
 
